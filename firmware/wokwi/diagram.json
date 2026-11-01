@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "author": "gas-leak-monitoring-system",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-esp32-devkit-v1", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    { "type": "wokwi-potentiometer", "id": "gasInput", "top": 0, "left": 240, "attrs": { "value": "0" } }
+  ],
+  "connections": [
+    [ "gasInput:VCC", "esp:3V3", "red", [] ],
+    [ "gasInput:GND", "esp:GND.1", "black", [] ],
+    [ "gasInput:SIG", "esp:34", "green", [] ]
+  ]
+}

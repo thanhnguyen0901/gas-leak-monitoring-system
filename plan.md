@@ -2,11 +2,11 @@
 
 This document defines HOW and WHEN the system will be implemented. Requirements define scope; the audit records actual activity. Work proceeds one requested phase at a time, with simulation before physical integration.
 
-Only Phase 0 is IN PROGRESS. All later phases are NOT STARTED. Checked items below are limited to prior completed work explicitly supplied by the user. The two initialization tasks remain unchecked as requested, even after this documentation delivery; the new audit entry will record the actual initialization verification. No future implementation is implied.
+Phase 0 is COMPLETED based on the verified repository initialization recorded in `audit.md`. Phase 1 is IN PROGRESS; Phase 2 and all later phases are NOT STARTED. Checkboxes reflect completed work, with remaining verification identified explicitly.
 
 ## Phase 0 - Project Initialization
 
-**Status:** IN PROGRESS
+**Status:** COMPLETED
 
 **Objective:** Establish the development baseline and repository documentation.
 
@@ -19,22 +19,22 @@ Only Phase 0 is IN PROGRESS. All later phases are NOT STARTED. Checked items bel
 - [x] External LED blink test completed
 - [x] Wokwi circuit successfully configured using `diagram.json`
 - [x] GitHub repository created
-- [ ] Repository project structure initialized
-- [ ] Core documentation created
+- [x] Repository project structure initialized
+- [x] Core documentation created
 
 **Exit Criteria:** Requested structure and documentation exist and initialization checks are reviewed.
 
 ## Phase 1 - Gas Input Simulation
 
-**Status:** NOT STARTED
+**Status:** IN PROGRESS
 
 **Objective:** Read a controllable simulated analog gas input in Wokwi.
 
 **Tasks:**
 
-- [ ] Define simulated analog input and its ADC range; label values as simulated/raw ADC.
-- [ ] Implement ADC reading and Serial output.
-- [ ] Sweep and test the input range.
+- [x] Define simulated analog input and its ADC range; label values as simulated/raw ADC.
+- [x] Implement ADC reading and Serial output.
+- [ ] Sweep and test the input range in Wokwi: record low, approximately middle, and high readings and confirm live Serial response. Manual simulator verification remains required.
 
 **Exit Criteria:** Compilation and Wokwi evidence demonstrate ADC and Serial values across the documented simulated range.
 

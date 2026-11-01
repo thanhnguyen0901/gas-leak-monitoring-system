@@ -1,0 +1,38 @@
+Phase 1 static verification — 2026-11-01
+
+VERIFIED: diagram.json parses and declares Wokwi format version 1.
+VERIFIED: Exactly two uniquely identified components: ESP32 DevKit V1 and potentiometer; no later-phase parts.
+VERIFIED: Potentiometer starts at position 0 (within its documented 0–1023 position scale).
+VERIFIED: Wiring matches reviewed pin names and intended VCC/ground/ADC topology (static check, not simulator lint).
+VERIFIED: Sketch ADC input GPIO 34 agrees with circuit SIG connection.
+VERIFIED: Source declares 115200 baud, raw label, explicit 12-bit ADC resolution and 500 ms interval (runtime untested).
+VERIFIED: No later-phase classification, output control, or network API calls found; source reviewed for sampling-only scope.
+VERIFIED: wokwi.toml parses and uses version 1.
+VERIFIED: Wokwi firmware output exists and is nonempty at firmware/wokwi/build/gas_input_simulation.ino.merged.bin.
+VERIFIED: Generated firmware output is ignored by Git.
+VERIFIED: Wokwi elf output exists and is nonempty at firmware/wokwi/build/gas_input_simulation.ino.elf.
+VERIFIED: Generated elf output is ignored by Git.
+VERIFIED: Simulator firmware points to merged image, including bootloader and partition table.
+VERIFIED: Phase 0 COMPLETED, Phase 1 IN PROGRESS, Phases 2–17 NOT STARTED.
+VERIFIED: Phase 2 and all later phase plans remain unchanged.
+VERIFIED: Historical audit content preserved byte-for-byte as a prefix.
+VERIFIED: Local documentation target resolves: README.md → firmware/README.md.
+VERIFIED: Local documentation target resolves: README.md → docs/evidence/phase-01/README.md.
+VERIFIED: Local documentation target resolves: README.md → audit.md.
+VERIFIED: Local documentation target resolves: README.md → requirements.md.
+VERIFIED: Local documentation target resolves: README.md → plan.md.
+VERIFIED: Local documentation target resolves: README.md → audit.md.
+VERIFIED: Local documentation target resolves: README.md → AGENTS.md.
+VERIFIED: Local documentation target resolves: README.md → docs/architecture.md.
+VERIFIED: Local documentation target resolves: README.md → docs/testing.md.
+VERIFIED: Local documentation target resolves: firmware/README.md → src/gas_input_simulation/gas_input_simulation.ino.
+VERIFIED: Local documentation target resolves: firmware/README.md → wokwi/README.md.
+VERIFIED: Local documentation target resolves: firmware/README.md → ../docs/evidence/phase-01/README.md.
+VERIFIED: Local documentation target resolves: firmware/wokwi/README.md → ../src/gas_input_simulation/gas_input_simulation.ino.
+VERIFIED: Local documentation target resolves: firmware/wokwi/README.md → ../README.md.
+VERIFIED: Local documentation target resolves: firmware/wokwi/README.md → ../../docs/evidence/phase-01/README.md.
+VERIFIED: Local documentation target resolves: docs/evidence/phase-01/README.md → build.txt.
+VERIFIED: Local documentation target resolves: docs/evidence/phase-01/README.md → static-validation.txt.
+VERIFIED: Local documentation target resolves: docs/evidence/phase-01/README.md → ../../../firmware/wokwi/README.md.
+Source SHA-256: 57146d725255d3e78d1386e92c9dbac1bd24337b2e5a93d080f28c7c5cdd11a8
+NOT RUN: Wokwi simulator and official wokwi-cli lint; low/middle/high and live-change Serial observations remain manual checks.

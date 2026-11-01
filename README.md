@@ -6,7 +6,7 @@ A university embedded systems project planned to monitor gas levels, classify SA
 
 ## Current status
 
-**Phase 0 - Project Initialization** — IN PROGRESS. This repository contains documentation and directory placeholders only. The full system is not implemented. Prior environment and LED simulation checks are recorded in [audit.md](audit.md).
+**Phase 1 - Gas Input Simulation** — IN PROGRESS. Phase 0 documentation is reconciled and complete. A raw ADC sampling sketch and Wokwi potentiometer circuit are implemented; simulator observations remain pending. See [firmware setup](firmware/README.md) and [verification evidence](docs/evidence/phase-01/README.md). Prior environment and LED simulation checks are recorded in [audit.md](audit.md).
 
 ## Planned architecture
 
@@ -46,14 +46,17 @@ Gas classification, warnings, and fan control must operate locally even when net
 │   ├── testing.md
 │   ├── decisions/README.md
 │   ├── diagrams/README.md
-│   ├── evidence/README.md
+│   ├── evidence/
+│   │   ├── README.md
+│   │   └── phase-01/ (verification notes and build output)
 │   └── report/README.md
 ├── firmware/
 │   ├── README.md
-│   ├── src/.gitkeep
+│   ├── src/gas_input_simulation/gas_input_simulation.ino
 │   └── wokwi/
 │       ├── README.md
-│       └── .gitkeep
+│       ├── diagram.json
+│       └── wokwi.toml
 ├── backend/README.md
 ├── frontend/README.md
 ├── infrastructure/README.md

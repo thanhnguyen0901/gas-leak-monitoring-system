@@ -1,0 +1,4 @@
+[wokwi]
+version = 1
+firmware = "build/gas_input_simulation.ino.merged.bin"
+elf = "build/gas_input_simulation.ino.elf"

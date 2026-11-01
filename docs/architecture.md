@@ -1,6 +1,6 @@
 # Target Architecture - Not Fully Implemented Yet
 
-This document describes the planned system. This repository currently contains documentation and placeholders only.
+This document describes the planned system. Phase 1 adds a simulated potentiometer input and raw ADC Serial output only; the remaining architecture is planned. See `../firmware/wokwi/README.md` for the current circuit.
 
 ```text
 Gas Sensor

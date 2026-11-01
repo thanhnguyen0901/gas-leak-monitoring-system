@@ -69,3 +69,40 @@ Captured local safety independence, simulation-first development, configurable M
 Phase 0 remains in progress as requested. Reconcile the initialization checkboxes during the next plan review using this entry as evidence. The exact next implementation step, when requested, is Phase 1 - Gas Input Simulation: define a controllable simulated analog input and ADC range in Wokwi, then implement ADC reading and Serial output and test the input range.
 
 No commit or push was performed.
+
+## 2026-11-01 — Phase 0 reconciliation and completion
+
+Reviewed `AGENTS.md`, `requirements.md`, `plan.md`, and the historical audit entries before work. Reconciled the initialization checklist against the verified 20-file inventory and documentation checks recorded above, now present in initialization commit `b50b695`. Marked repository structure and core documentation complete and Phase 0 COMPLETED. Phase 1 is now IN PROGRESS; all later phases remain NOT STARTED. Historical audit entries were preserved.
+
+The next requested task is Phase 1 only: simulated analog input, ADC reading, and labeled Serial output, followed by compilation and Wokwi verification.
+
+## 2026-11-01 — Phase 1 gas input simulation implementation
+
+### Files changed
+
+- Created `firmware/src/gas_input_simulation/gas_input_simulation.ino`.
+- Created `firmware/wokwi/diagram.json` and `firmware/wokwi/wokwi.toml`.
+- Removed the now-unnecessary `firmware/src/.gitkeep` and `firmware/wokwi/.gitkeep`.
+- Updated `firmware/README.md` and `firmware/wokwi/README.md` with build, ADC, wiring, and simulator instructions.
+- Updated `README.md` and `docs/architecture.md` to reflect the limited current implementation.
+- Updated `plan.md` for Phase 0 reconciliation, Phase 1 implementation tasks, and pending simulator verification.
+- Appended this audit entry and the Phase 0 reconciliation entry; preserved all historical entries.
+- Added `docs/evidence/phase-01/README.md`, `build.txt`, and `static-validation.txt`.
+
+### Implementation
+
+A Wokwi potentiometer simulates the gas signal: SIG → GPIO 34 (ADC1), VCC → 3V3, GND → GND.1. Firmware sets 12-bit ADC resolution (raw 0–4095), calls `analogRead`, and prints `Gas raw ADC: <value>` at 115200 baud every 500 ms. Wokwi potentiometer position uses a separate 0–1023 scale. These are simulated/raw values, not calibrated ppm. No later-phase functionality was added.
+
+### Build result
+
+Compiled successfully with Arduino CLI 1.5.1 and Arduino-ESP32 3.3.12 for `esp32:esp32:esp32doit-devkit-v1`; exit code 0. Sketch uses 279164 bytes (21%) of 1310720 bytes of flash. Global variables use 22196 bytes (6%) of 327680 bytes, leaving 305484 bytes. Actual output and reproduction command are recorded under `docs/evidence/phase-01/`. Build artifacts are ignored; Wokwi configuration references the generated merged binary and ELF.
+
+### Wokwi verification, observations, and limitations
+
+Static JSON/TOML and wiring checks are recorded in `docs/evidence/phase-01/static-validation.txt`. Simulator execution and official CLI lint were not performed: local Wokwi CLI/extension and environment CLI token are unavailable. Low, approximately middle, high, and live-change Serial checks are NOT RUN; no runtime readings or screenshots are invented. Compilation does not establish simulator behavior. Manual browser instructions and an explicit pending-case table are provided. No physical sensor or concentration calibration was tested.
+
+### Current phase status and exact next step
+
+Phase 0 is COMPLETED. Phase 1 remains IN PROGRESS: simulated input definition and sampling/Serial implementation are complete; the Wokwi input sweep and live response verification remain unchecked. Phase 2 and all later phases remain NOT STARTED.
+
+Next: run the canonical sketch and version-controlled circuit in Wokwi, vary the knob through low/middle/high and back, and record at least three consecutive readings per position plus live response under `docs/evidence/phase-01/`. Append the real observations to this audit and complete Phase 1 only if its exit criteria are met. Do not start Phase 2. No commit or push was performed.
