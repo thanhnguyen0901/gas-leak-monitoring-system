@@ -63,7 +63,7 @@ export class StorageService implements OnModuleDestroy {
     } catch(error) { await c.query('ROLLBACK'); throw error; }
     finally { c.release(); }
   }
-  async history(id: string, limit: number) { return (await this.pool!.query('SELECT payload FROM gas_readings WHERE device_id=$1 ORDER BY received_at DESC LIMIT $2',[id,limit])).rows.map(r=>r.payload); }
-  async alertHistory(id: string | undefined, limit: number) { return (await this.pool!.query('SELECT payload FROM alerts WHERE ($1::text IS NULL OR device_id=$1) ORDER BY received_at DESC LIMIT $2',[id??null,limit])).rows.map(r=>r.payload); }
+  async history(id: string, limit: number) { return (await this.pool!.query('SELECT payload FROM gas_readings WHERE device_id=$1 ORDER BY received_at DESC, sequence DESC LIMIT $2',[id,limit])).rows.map(r=>r.payload); }
+  async alertHistory(id: string | undefined, limit: number) { return (await this.pool!.query('SELECT payload FROM alerts WHERE ($1::text IS NULL OR device_id=$1) ORDER BY received_at DESC, (payload->>\'sequence\')::bigint DESC LIMIT $2',[id??null,limit])).rows.map(r=>r.payload); }
   async onModuleDestroy() { await this.pool?.end(); }
 }

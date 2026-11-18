@@ -1,0 +1,1 @@
+Diagram JSON parsed; IDs unique; connection part endpoints resolve. Exported headers match canonical source and exclude config.local.h. This is static validation, not Wokwi runtime or official lint.

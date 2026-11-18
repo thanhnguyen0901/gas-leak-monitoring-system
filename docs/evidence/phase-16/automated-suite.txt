@@ -1,0 +1,115 @@
+LED mapping and buzzer cadence passed over 10 seconds
+State boundaries, hysteresis, jumps, invalid input and all 4096 rising inputs passed
+Simulation allowed; unconfirmed physical profile rejected; explicitly confirmed profile accepted. No real calibration is implied.
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.003s
+
+OK
+
+> gas-monitor-backend@0.1.0 test
+> npm run build && node --test dist/test/*.test.js
+
+
+> gas-monitor-backend@0.1.0 build
+> tsc -p tsconfig.json
+
+✔ configured read token protects REST and rejects unauthorized Socket.IO clients (125.656583ms)
+✔ reject invalid numeric and boolean runtime configuration (0.610625ms)
+✔ reject malformed, mismatched and out-of-range MQTT data (2.356416ms)
+✔ MQTT to NestJS REST/WebSocket; alert deduplication and stale device status (384.974292ms)
+✔ warning, danger escalation, recovery, duplicate pending events and cooldown (2.053208ms)
+✔ delivery errors retry without blocking ingestion; rate-limit retry_after respected (0.214292ms)
+✔ bounded queue and failed delivery limit (0.252166ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5558.5065
+
+> gas-monitor-dashboard@0.1.0 test
+> node --import tsx --test test/*.test.ts
+
+✔ history merges concurrent HTTP/socket data without duplicates; preserves reboot identity and time order (0.757083ms)
+✔ alerts deduplicate; disconnected backend never reports current online status (0.156041ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 88.878084
+
+> gas-monitor-dashboard@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v7.3.8 building client environment for production...
+transforming...
+✓ 469 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.71 kB │ gzip:   0.47 kB
+dist/assets/index-D_BiWcuL.css    6.16 kB │ gzip:   2.01 kB
+dist/assets/index-B6Fwn92F.js   696.08 kB │ gzip: 207.33 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.48s
+
+> gas-monitor-backend@0.1.0 test:db
+> npm run build && node --test dist/test/postgres.integration.js
+
+
+> gas-monitor-backend@0.1.0 build
+> tsc -p tsconfig.json
+
+✔ real PostgreSQL migration, idempotence, constraints, history and restart (65.341167ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 191.492833
+
+> gas-monitor-backend@0.1.0 test:system
+> npm run build && node --test dist/test/system.integration.js
+
+
+> gas-monitor-backend@0.1.0 build
+> tsc -p tsconfig.json
+
+✔ synthetic device → MQTT → NestJS → PostgreSQL → REST/WebSocket → mock Telegram (1616.629167ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1953.063542
+
+> gas-monitor-backend@0.1.0 test:failure
+> npm run build && node --test dist/test/failure.integration.js
+
+
+> gas-monitor-backend@0.1.0 build
+> tsc -p tsconfig.json
+
+✔ broker unavailable/reconnect, stale telemetry, retired boot and database outage/recovery (10423.904709ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10659.795916
+Selected automated checks completed. Wokwi/live services/physical acceptance remain manual.

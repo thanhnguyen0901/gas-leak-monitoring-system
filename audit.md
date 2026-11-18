@@ -218,3 +218,11 @@ Added real backend outage/reconnect tests, stale/retired-boot protection, databa
 Verification: Actual temporary MQTT shutdown/restart and PostgreSQL pause/unpause tests passed; all 6 backend regression tests passed; firmware compiled. Actual ESP32/Wokwi Wi-Fi outages, local output continuity and physical sensor/reset faults remain pending, so phase exit is not claimed.
 
 Status: IN PROGRESS. Evidence: `docs/evidence/phase-15/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.
+
+## 2026-11-18 — Phase 16
+
+Added a consolidated verification command, credential-free Wokwi source exporter, authenticated REST/WebSocket tests, deterministic equal-time history ordering and a single final manual acceptance checklist. Updated firmware/simulation instructions for the integrated code.
+
+Verification: Complete automated suite passed: portable firmware outputs/state, hardware guard, Python calibration tests, 7 backend tests, 2 frontend tests/build, real PostgreSQL migration, full software-path integration and broker/DB outage tests. Diagram/export static checks passed. Physical end-to-end and actual Wokwi/live Telegram remain unexecuted; Phase 16 is not complete.
+
+Status: IN PROGRESS. Evidence: `docs/evidence/phase-16/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.

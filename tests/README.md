@@ -1,3 +1,7 @@
-# Tests
+# Verification
 
-Future cross-component and end-to-end tests and fixtures belong here. Component-specific tests may live with their components. Follow `../docs/testing.md`; no executable tests or results are supplied at initialization.
+Run `scripts/verify.sh` for native firmware logic/config guards, calibration unit tests, backend MQTT/API/WebSocket/auth/notification tests, frontend tests and production build. Install backend/frontend dependencies first using npm ci.
+
+Set RUN_DOCKER_TESTS=1 for isolated real PostgreSQL migration, full software-path integration and outage/recovery tests. These use uniquely named throwaway containers and generated credentials, never the project DB. Set RUN_FIRMWARE_BUILD=1 with Arduino libraries configured to include ESP32 compilation.
+
+The software-path fixture and mock Telegram are explicitly synthetic. Real Wokwi, actual Telegram delivery, calibrated hardware and airflow tests are in docs/final-acceptance.md. Curated evidence is under docs/evidence/phase-XX/.
