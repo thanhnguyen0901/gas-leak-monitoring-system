@@ -69,14 +69,14 @@ Phase 0 is COMPLETED. The user authorized implementing subsequent phases sequent
 
 ## Phase 4 - OLED Display
 
-**Status:** NOT STARTED
+**Status:** IN PROGRESS
 
 **Objective:** Show gas level and system status locally.
 
 **Tasks:**
 
-- [ ] Integrate SSD1306 OLED in simulation.
-- [ ] Display gas level with units/raw label and current state.
+- [x] Integrate SSD1306 OLED in simulation.
+- [x] Display gas level with units/raw label and current state.
 - [ ] Verify display updates during state changes.
 
 **Exit Criteria:** Simulation shows readable, correct OLED data across states.

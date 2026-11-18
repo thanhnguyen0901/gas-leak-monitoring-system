@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include "GasState.h"
 #include "LocalOutputs.h"
+#include "Display.h"
+StatusDisplay display;
 
 constexpr uint8_t GAS_INPUT_PIN = 34;
 constexpr uint8_t GREEN_PIN = 25, YELLOW_PIN = 26, RED_PIN = 27, BUZZER_PIN = 32;
@@ -17,6 +19,7 @@ void setup() {
   analogReadResolution(12);
   for (auto pin : {GREEN_PIN, YELLOW_PIN, RED_PIN}) pinMode(pin, OUTPUT);
   ledcAttach(BUZZER_PIN, 2000, 8);
+  display.begin();
 }
 
 void loop() {
@@ -27,6 +30,7 @@ void loop() {
     gasRawAdc = analogRead(GAS_INPUT_PIN);
     gasState = stateEngine.update(gasRawAdc);
     Serial.printf("Gas raw ADC: %d State: %s\n", gasRawAdc, stateName(gasState));
+    display.update(gasRawAdc, gasState);
   }
   const auto out = localOutputs(gasState, now);
   digitalWrite(GREEN_PIN, out.green);

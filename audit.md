@@ -122,3 +122,11 @@ Added green/yellow/red LEDs on GPIO25/26/27 with 220-ohm series resistors and bu
 Verification: ESP32 compilation and native LED/cadence tests passed. Wokwi visual/audio checks remain deferred.
 
 Status: IN PROGRESS. Evidence: `docs/evidence/phase-03/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.
+
+## 2026-11-18 — Phase 4
+
+Added SSD1306 I2C display on SDA21/SCL22 at 0x3C showing raw ADC, gas state and simulation/calibration label. Added pinned Wokwi library list and a reusable firmware build script.
+
+Verification: ESP32 compilation succeeded using Adafruit SSD1306 2.5.17, GFX 1.13.0 and BusIO 1.17.4. Display absence does not prevent sampling; Wire timeout is bounded. Visual display verification remains deferred.
+
+Status: IN PROGRESS. Evidence: `docs/evidence/phase-04/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.
