@@ -55,9 +55,9 @@ inline void connectivityTask(void*) {
         if (alertPending || (telemetryDue && latestReading && xQueuePeek(latestReading, &sample, 0)==pdTRUE)) {
           char json[512];
           snprintf(json, sizeof(json),
-            "{\"version\":1,\"deviceId\":\"%s\",\"bootId\":\"%s\",\"sequence\":%lu,\"uptimeMs\":%lu,\"rawAdc\":%d,\"state\":\"%s\",\"previousState\":\"%s\",\"fanOn\":%s,\"simulated\":true}",
+            "{\"version\":1,\"deviceId\":\"%s\",\"bootId\":\"%s\",\"sequence\":%lu,\"uptimeMs\":%lu,\"rawAdc\":%d,\"state\":\"%s\",\"previousState\":\"%s\",\"fanOn\":%s,\"simulated\":%s}",
             Config::DEVICE_ID, bootId, static_cast<unsigned long>(sample.sequence), static_cast<unsigned long>(sample.uptime),
-            sample.raw, stateName(sample.state), stateName(sample.previous), sample.fan ? "true" : "false");
+            sample.raw, stateName(sample.state), stateName(sample.previous), sample.fan ? "true" : "false", Config::SIMULATED_INPUT ? "true" : "false");
           if (mqtt.publish(alertPending ? alertTopic : telemetryTopic, json)) {
             if (alertPending) xQueueReceive(alertEvents, &sample, 0);
             else lastPublish=now;
