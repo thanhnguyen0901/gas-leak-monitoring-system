@@ -154,3 +154,11 @@ Added configurable MQTT telemetry/alert/status topics, JSON v1 payload, retained
 Verification: ESP32 compilation succeeded with PubSubClient 2.8. Actual broker delivery, TLS credentials and outage behavior on ESP32 remain final manual checks. QoS 0 data and 16 RAM alerts have explicit loss limits.
 
 Status: IN PROGRESS. Evidence: `docs/evidence/phase-07/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.
+
+## 2026-11-18 — Phase 8
+
+Implemented NestJS MQTT ingestion, strict v1 payload validation, bounded in-memory history, alert deduplication, stale-device status, REST endpoints and Socket.IO broadcasts. Added optional read token and explicit CORS/localhost defaults.
+
+Verification: npm test passed: TypeScript build, invalid-payload tests and a real temporary MQTT broker → NestJS → REST/WebSocket test, including duplicate alerts and stale data. This verifies software transport, not ESP32/Wokwi or external HiveMQ.
+
+Status: COMPLETED. Evidence: `docs/evidence/phase-08/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.

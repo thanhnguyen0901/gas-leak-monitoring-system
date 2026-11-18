@@ -127,17 +127,17 @@ Phase 0 is COMPLETED. The user authorized implementing subsequent phases sequent
 
 ## Phase 8 - Backend
 
-**Status:** NOT STARTED
+**Status:** COMPLETED
 
 **Objective:** Ingest device messages and expose monitoring interfaces in NestJS.
 
 **Tasks:**
 
-- [ ] Create the NestJS application when requested.
-- [ ] Implement MQTT subscriber and telemetry processing.
-- [ ] Implement alert processing.
-- [ ] Implement REST and WebSocket interfaces.
-- [ ] Test valid/invalid payloads and interface behavior.
+- [x] Create the NestJS application when requested.
+- [x] Implement MQTT subscriber and telemetry processing.
+- [x] Implement alert processing.
+- [x] Implement REST and WebSocket interfaces.
+- [x] Test valid/invalid payloads and interface behavior.
 
 **Exit Criteria:** Backend tests verify ingestion, processing, REST, and WebSocket behavior using the agreed contracts.
 
