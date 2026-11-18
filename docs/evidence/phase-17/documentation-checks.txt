@@ -1,0 +1,6 @@
+Local Markdown link targets verified: 34.
+Historical audit prefix from Phase 1 preserved.
+Completed phase statuses: 0,8,9,10; all others explicitly IN PROGRESS pending documented acceptance.
+Local credentials and generated firmware outputs ignored.
+Versioned/new text credential-pattern scan: no private keys, bot-token patterns or AWS access-key patterns found. Empty examples and explicitly synthetic test tokens are intentional.
+No Wokwi/hardware/Telegram/calibration PASS was inferred.

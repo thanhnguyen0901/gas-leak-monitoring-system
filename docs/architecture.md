@@ -1,52 +1,34 @@
 # Target Architecture - Not Fully Implemented Yet
 
-This document describes the planned system. Phase 1 adds a simulated potentiometer input and raw ADC Serial output only; the remaining architecture is planned. See `../firmware/wokwi/README.md` for the current circuit.
+Software components are implemented; full simulation and calibrated physical acceptance are pending. This title describes the complete hardware-plus-service target, not an assertion that only placeholders exist.
 
 ```text
-Gas Sensor
+Gas Sensor (potentiometer for Wokwi)
     |
     v
-ESP32
- |  |  |  |
- |  |  |  +--> Relay --> Fan
- |  |  +-----> Buzzer / LEDs
- |  +--------> OLED
- |
- +--> Wi-Fi
-       |
-       v
-    MQTT Broker
-       |
-       v
-   NestJS Backend
-     |      |
-     |      +--> Telegram Notification
-     |
-     +--> PostgreSQL
-     |
-     +--> WebSocket / REST
-             |
-             v
-       React Dashboard
+ESP32 core 1: sample → state engine → LEDs / buzzer / relay → fan
+    |                      |
+    |                      +→ one-frame queue → OLED task (core 0)
+    +→ latest snapshot + 16-event queue → Wi-Fi / MQTT task (core 0)
+                                           |
+                                        MQTT broker
+                                           |
+                                      NestJS backend
+                                 /             |           \
+                         PostgreSQL      REST / Socket.IO   Telegram worker
+                                                |
+                                         React dashboard
 ```
 
-## Local safety independence
+## Local safety
 
-The ESP32 owns sensing, SAFE / WARNING / DANGER classification, local warnings, OLED updates, and relay/fan control. Local safety must continue through Wi-Fi, MQTT, backend, database, dashboard, and Internet failures. Network connection and retry work must be separate from the local safety loop. Telegram cooldowns must not delay local warnings or fan control.
+GPIO34/ADC1 readings are sampled every 500 ms at 12-bit resolution. The portable engine classifies using configured raw thresholds and recovery hysteresis. GPIO25/26/27 LEDs, GPIO32 buzzer and GPIO33 relay are controlled only by the local loop. Wi-Fi, DNS, NTP, TLS, MQTT and backend state are never prerequisites for those outputs. OLED I2C runs in a separate task and uses a one-frame queue.
 
-## Planned component responsibilities
+Default simulation thresholds are 1400/2800 with 150-count hysteresis. Physical mode requires explicit calibration confirmation and valid raw thresholds. Floating sensor inputs, reset/brownout behavior and fan electrical operation still need physical review; compilation cannot validate those properties.
 
-- **Sensor input:** simulated analog source in Wokwi first; MQ-2 or MQ-5 on physical hardware after integration and calibration. Label raw ADC and simulated values explicitly.
-- **ESP32:** Arduino Framework C/C++ firmware on ESP32 DevKit V1, developed with Arduino IDE 2.x.
-- **MQTT broker:** HiveMQ Cloud initially; broker configuration remains replaceable.
-- **NestJS backend:** MQTT ingestion, telemetry and alert processing, REST, WebSocket, notification cooldown and recovery handling.
-- **PostgreSQL:** devices, gas readings, and alerts; schema details belong to Phase 9.
-- **React dashboard:** TypeScript/Vite interface with realtime readings, status, fan state, connectivity, charts, and alert history.
-- **Telegram:** remote warning, danger, and recovery notifications through the Bot API.
+## MQTT and remote services
 
-## Planned MQTT topics
-
-These proposed topics are subject to refinement before Phase 7 implementation:
+Implemented v1 topics:
 
 ```text
 gas-monitor/device/{deviceId}/telemetry
@@ -54,8 +36,12 @@ gas-monitor/device/{deviceId}/alert
 gas-monitor/device/{deviceId}/status
 ```
 
-Telemetry will carry readings and local state; alert messages will describe state events; status will support connectivity visibility. JSON schema, device identity rules, units, publish intervals, QoS, retained messages, Last Will, and reconnect behavior must be defined and verified before MQTT integration. No topic contract or remote command path is implemented here.
+See [payload/QoS contract](mqtt-contract.md). The broker is configurable; HiveMQ Cloud can use TLS/8883 with CA validation. Default empty SSID keeps networking disabled. Reconnect runs on core 0. No remote actuator-command topic is implemented.
 
-## Configuration and calibration boundaries
+NestJS validates topic identity and payloads, serializes bounded ingestion, drops duplicate/older readings, persists history when DATABASE_URL is configured, broadcasts Socket.IO updates and exposes read-only REST. Latest readings expire as online data after a configurable stale interval. PostgreSQL transactions and unique identifiers prevent duplicate stored events. Memory mode is explicitly temporary.
 
-Connection details and secrets belong in external configuration, with placeholder templates introduced in the relevant phases. Real gas ppm requires calibrated, datasheet-based conversion. Simulated inputs and thresholds establish behavior only, not physical gas accuracy.
+The Telegram worker processes warning/danger/recovery independently from ingestion, with cooldown and bounded retries. Notification queue and cooldown state are RAM-only. The browser receives raw counts and server receipt times, never a calibrated ppm estimate.
+
+## Implementation limits
+
+The Wokwi blue LED represents the relay's fan load only. There is no durable offline firmware history, guaranteed QoS0 delivery, durable notification outbox, ppm conversion, reliable floating-sensor detection or certified physical safety claim. Review [failure matrix](failure-matrix.md), [hardware preparation](hardware.md), [calibration](calibration.md) and [final acceptance](final-acceptance.md).

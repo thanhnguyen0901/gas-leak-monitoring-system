@@ -23,6 +23,7 @@ test('MQTT to NestJS REST/WebSocket; alert deduplication and stale device status
   await new Promise<void>(r=>tcp.listen(0,'127.0.0.1',r));
   const address=tcp.address() as {port:number};
   process.env.MQTT_URL=`mqtt://127.0.0.1:${address.port}`; process.env.STALE_AFTER_MS='200';
+  process.env.DATABASE_URL=''; process.env.NOTIFICATIONS_ENABLED='false'; process.env.APP_TOKEN='';
   const app=await createApp(); await app.listen(0,'127.0.0.1');
   const base=await app.getUrl(); const publisher=connect(process.env.MQTT_URL); const socket=io(base,{transports:['websocket']});
   try {

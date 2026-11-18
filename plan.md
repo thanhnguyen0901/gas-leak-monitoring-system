@@ -51,6 +51,8 @@ Phase 0 is COMPLETED. The user authorized implementing subsequent phases sequent
 - [x] Consider hysteresis and document the chosen behavior.
 - [x] Test boundaries, rising/falling values, and recovery.
 
+- [ ] Record actual Wokwi state transition observations during final acceptance.
+
 **Exit Criteria:** State transition tests and simulation verify all states and documented boundary/hysteresis behavior.
 
 ## Phase 3 - Local Warning System
@@ -184,6 +186,8 @@ Phase 0 is COMPLETED. The user authorized implementing subsequent phases sequent
 - [x] Define and implement anti-spam handling and cooldown.
 - [x] Test duplicate events, cooldown boundaries, and delivery failures.
 
+- [ ] Verify live Telegram warning/danger/recovery with the configured bot/chat.
+
 **Exit Criteria:** Notification tests verify warning/danger/recovery and cooldown behavior without affecting local safety.
 
 ## Phase 12 - Full Simulation Integration
@@ -255,20 +259,20 @@ Phase 0 is COMPLETED. The user authorized implementing subsequent phases sequent
 
 - [ ] Run hardware input → ESP32 → MQTT → backend → database → web → Telegram checks.
 - [ ] Verify state transitions, fan response, history, and recovery.
-- [ ] Review requirements coverage and record defects/limitations.
+- [x] Review requirements coverage and record defects/limitations.
 
 **Exit Criteria:** All required end-to-end checks have recorded results and unresolved limitations are explicitly reviewed.
 
 ## Phase 17 - Final Report
 
-**Status:** NOT STARTED
+**Status:** IN PROGRESS
 
 **Objective:** Document design, implementation, verification, and limitations.
 
 **Tasks:**
 
-- [ ] Prepare the final university report.
+- [x] Prepare the final university report draft.
 - [ ] Include architecture, circuit diagrams, calibration, and test evidence.
-- [ ] Describe results, limitations, and future work with traceable references.
+- [x] Describe results, limitations, and future work with traceable references.
 
 **Exit Criteria:** Final report is reviewed and its claims are supported by recorded evidence.

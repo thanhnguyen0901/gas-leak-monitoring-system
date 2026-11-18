@@ -1,3 +1,3 @@
-# Final report
+# Report draft
 
-Store the university report, supporting references, and reviewed exports during Phase 17. Ground claims in implementation and verification evidence.
+[final-report.md](final-report.md) records implemented architecture and actual software verification. [requirements-coverage.md](requirements-coverage.md) maps requirements to implementation/evidence and pending acceptance. These are drafts: add real Wokwi, hardware, calibration and live Telegram results before final submission. No physical test results have been invented.

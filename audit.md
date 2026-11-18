@@ -226,3 +226,11 @@ Added a consolidated verification command, credential-free Wokwi source exporter
 Verification: Complete automated suite passed: portable firmware outputs/state, hardware guard, Python calibration tests, 7 backend tests, 2 frontend tests/build, real PostgreSQL migration, full software-path integration and broker/DB outage tests. Diagram/export static checks passed. Physical end-to-end and actual Wokwi/live Telegram remain unexecuted; Phase 16 is not complete.
 
 Status: IN PROGRESS. Evidence: `docs/evidence/phase-16/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.
+
+## 2026-11-18 — Phase 17
+
+Prepared the implementation report draft and FR-01–FR-16 coverage matrix, refreshed repository/architecture/testing/run documentation, and consolidated all remaining user acceptance work. Hardened the basic backend test to ignore exported live storage/notification configuration. Reconciled Phase 16 requirements-review task as completed using the new coverage matrix.
+
+Verification: Final backend regression passed (7 tests). Documentation links, audit-prefix preservation, phase statuses, ignored secret/build paths and credential-pattern checks were reviewed. Actual measured Wokwi/hardware/Telegram/calibration results and final report review are still pending; the report is explicitly a draft.
+
+Status: IN PROGRESS. Evidence: `docs/evidence/phase-17/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.
