@@ -15,6 +15,7 @@ GasState gasState = GasState::SAFE;
 int gasRawAdc = 0;
 uint32_t lastSample = 0;
 bool sampled = false;
+uint32_t sequence = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -34,7 +35,9 @@ void loop() {
     sampled = true;
     lastSample = now;
     gasRawAdc = analogRead(GAS_INPUT_PIN);
+    const auto previousState = gasState;
     gasState = stateEngine.update(gasRawAdc);
+    recordSnapshot({gasRawAdc, gasState, previousState, gasState != GasState::SAFE, ++sequence, now});
     Serial.printf("Gas raw ADC: %d State: %s\n", gasRawAdc, stateName(gasState));
     display.update(gasRawAdc, gasState);
   }

@@ -146,3 +146,11 @@ Added optional Wi-Fi configuration through ignored config.local.h, with empty-SS
 Verification: ESP32 compilation succeeded. Task creation failure leaves local loop active. Real/simulated AP disconnect and restore checks are deferred to final testing; no connectivity PASS is claimed.
 
 Status: IN PROGRESS. Evidence: `docs/evidence/phase-06/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.
+
+## 2026-11-18 — Phase 7
+
+Added configurable MQTT telemetry/alert/status topics, JSON v1 payload, retained Last Will, reconnect spacing, TLS CA validation with NTP and a bounded nonblocking snapshot/event queue. Added the transport contract.
+
+Verification: ESP32 compilation succeeded with PubSubClient 2.8. Actual broker delivery, TLS credentials and outage behavior on ESP32 remain final manual checks. QoS 0 data and 16 RAM alerts have explicit loss limits.
+
+Status: IN PROGRESS. Evidence: `docs/evidence/phase-07/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.

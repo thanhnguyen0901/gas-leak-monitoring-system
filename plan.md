@@ -111,16 +111,16 @@ Phase 0 is COMPLETED. The user authorized implementing subsequent phases sequent
 
 ## Phase 7 - MQTT
 
-**Status:** NOT STARTED
+**Status:** IN PROGRESS
 
 **Objective:** Publish device telemetry and alerts.
 
 **Tasks:**
 
-- [ ] Refine telemetry, alert, and status topics.
-- [ ] Define JSON payloads, units, and publish rules.
-- [ ] Configure broker details externally, initially targeting HiveMQ Cloud.
-- [ ] Implement publish and reconnect behavior without blocking local safety.
+- [x] Refine telemetry, alert, and status topics.
+- [x] Define JSON payloads, units, and publish rules.
+- [x] Configure broker details externally, initially targeting HiveMQ Cloud.
+- [x] Implement publish and reconnect behavior without blocking local safety.
 - [ ] Test broker outage and recovery.
 
 **Exit Criteria:** Documented MQTT messages are observed and reconnect behavior is verified while local safety remains active.
