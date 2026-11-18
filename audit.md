@@ -114,3 +114,11 @@ Added the portable SAFE/WARNING/DANGER engine with simulation-only raw threshold
 Verification: Native C++ tests passed across all 4096 ADC values and boundary/recovery/invalid cases (`native.txt`). ESP32 compilation succeeded (`build.txt`). Wokwi transition observations remain deferred to final user testing.
 
 Status: IN PROGRESS. Evidence: `docs/evidence/phase-02/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.
+
+## 2026-11-18 — Phase 3
+
+Added green/yellow/red LEDs on GPIO25/26/27 with 220-ohm series resistors and buzzer on GPIO32. Warning sounds 150ms/2s; danger 200ms/400ms at 2kHz. Replaced the sampling delay with millis scheduling.
+
+Verification: ESP32 compilation and native LED/cadence tests passed. Wokwi visual/audio checks remain deferred.
+
+Status: IN PROGRESS. Evidence: `docs/evidence/phase-03/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.

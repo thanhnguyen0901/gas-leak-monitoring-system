@@ -1,0 +1,1 @@
+LED mapping and buzzer cadence passed over 10 seconds

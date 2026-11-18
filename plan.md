@@ -55,14 +55,14 @@ Phase 0 is COMPLETED. The user authorized implementing subsequent phases sequent
 
 ## Phase 3 - Local Warning System
 
-**Status:** NOT STARTED
+**Status:** IN PROGRESS
 
 **Objective:** Provide state-driven local visual and audible warnings.
 
 **Tasks:**
 
-- [ ] Implement green, yellow, and red LED indications.
-- [ ] Define and implement buzzer patterns.
+- [x] Implement green, yellow, and red LED indications.
+- [x] Define and implement buzzer patterns.
 - [ ] Verify outputs for every state and transition.
 
 **Exit Criteria:** Compilation and simulation verify LED mapping and buzzer patterns without networking.
