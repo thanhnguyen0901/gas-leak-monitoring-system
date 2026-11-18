@@ -2,6 +2,7 @@
 #include "GasState.h"
 #include "LocalOutputs.h"
 #include "Display.h"
+#include "Connectivity.h"
 StatusDisplay display;
 
 constexpr uint8_t GAS_INPUT_PIN = 34;
@@ -24,6 +25,7 @@ void setup() {
   pinMode(RELAY_PIN, OUTPUT);
   digitalWrite(RELAY_PIN, RELAY_ACTIVE_LOW ? HIGH : LOW);
   display.begin();
+  startConnectivity();
 }
 
 void loop() {

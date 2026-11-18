@@ -138,3 +138,11 @@ Added local relay control on GPIO33, active high in Wokwi. Fan runs for WARNING 
 Verification: ESP32 compilation and native fan/state-output tests passed. Relay switching and actual fan electrical/airflow behavior remain manual checks. Physical relay polarity must be verified.
 
 Status: IN PROGRESS. Evidence: `docs/evidence/phase-05/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.
+
+## 2026-11-18 — Phase 6
+
+Added optional Wi-Fi configuration through ignored config.local.h, with empty-SSID offline defaults. Reconnection runs at 10-second intervals in a dedicated FreeRTOS task on core 0; local sensing/outputs remain on core 1.
+
+Verification: ESP32 compilation succeeded. Task creation failure leaves local loop active. Real/simulated AP disconnect and restore checks are deferred to final testing; no connectivity PASS is claimed.
+
+Status: IN PROGRESS. Evidence: `docs/evidence/phase-06/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.

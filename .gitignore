@@ -68,3 +68,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+
+# Local firmware credentials and calibrated hardware configuration
+config.local.h

@@ -97,14 +97,14 @@ Phase 0 is COMPLETED. The user authorized implementing subsequent phases sequent
 
 ## Phase 6 - Wi-Fi Connectivity
 
-**Status:** NOT STARTED
+**Status:** IN PROGRESS
 
 **Objective:** Add Wi-Fi while preserving local safety operation.
 
 **Tasks:**
 
-- [ ] Add external Wi-Fi configuration without committed credentials.
-- [ ] Implement connection and nonblocking reconnect logic.
+- [x] Add external Wi-Fi configuration without committed credentials.
+- [x] Implement connection and nonblocking reconnect logic.
 - [ ] Test startup offline, disconnect, and restoration.
 
 **Exit Criteria:** Local safety continues during outages and Wi-Fi reconnects when restored.
