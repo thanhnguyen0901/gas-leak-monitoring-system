@@ -1,0 +1,21 @@
+ Image gas-monitor-qa-frontend Building
+ Image gas-monitor-qa-backend Building
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.21kB done
+#1 DONE 0.0s
+
+#2 [frontend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 313B done
+#2 DONE 0.0s
+
+#3 [backend internal] load build definition from Dockerfile
+#3 transferring dockerfile: 446B done
+#3 DONE 0.0s
+
+#4 [frontend internal] load metadata for docker.io/library/node:22-alpine
+#4 ...
+
+#5 [frontend internal] load metadata for docker.io/nginxinc/nginx-unprivileged:alpine
+
+
+Build interrupted while Docker was still loading base-image metadata from Docker Hub; image creation/startup NOT VERIFIED. Native application builds and isolated software integration passed separately.

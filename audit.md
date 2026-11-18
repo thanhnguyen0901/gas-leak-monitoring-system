@@ -186,3 +186,11 @@ Added opt-in Telegram delivery, warning/danger/recovery messages, severity-aware
 Verification: All 5 backend tests passed, including notification policy, recovery, duplicate/cooldown, retry_after and bounded retry/queue tests using mock delivery. No real Telegram message was sent. Live bot/chat acceptance remains manual. Queue and cooldown are RAM-only across backend restart.
 
 Status: IN PROGRESS. Evidence: `docs/evidence/phase-11/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.
+
+## 2026-11-18 — Phase 12
+
+Added Dockerfiles, localhost-only development Compose services, generated local configuration helper, broker configuration and a repeatable isolated software-path integration test.
+
+Verification: Synthetic MQTT → NestJS → real PostgreSQL → REST/WebSocket → mock Telegram integration passed through SAFE/WARNING/DANGER/recovery. Compose syntax validated. Docker image build was interrupted while waiting for base-image metadata and is NOT VERIFIED. Full Wokwi and live Telegram integration remain deferred to final acceptance.
+
+Status: IN PROGRESS. Evidence: `docs/evidence/phase-12/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.

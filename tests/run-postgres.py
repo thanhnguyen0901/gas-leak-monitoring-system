@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 """Run DB tests in an isolated throwaway container; never touches the project database."""
-import os, secrets, subprocess, time
+import os, secrets, subprocess, time, argparse
 from pathlib import Path
 root=Path(__file__).resolve().parents[1]
+parser=argparse.ArgumentParser()
+parser.add_argument('--suite',choices=['db','system','failure'],default='db')
+args=parser.parse_args()
 name='gas-monitor-test-'+secrets.token_hex(4)
 password=secrets.token_urlsafe(24)
 env={**os.environ,'POSTGRES_PASSWORD':password}
@@ -14,6 +17,6 @@ try:
  else: raise RuntimeError('PostgreSQL did not become ready')
  port=subprocess.check_output(['docker','port',name,'5432/tcp'],text=True).strip().rsplit(':',1)[1]
  env.update(DATABASE_URL=f'postgres://postgres:{password}@127.0.0.1:{port}/postgres')
- subprocess.run(['npm','run','test:db'],cwd=root/'backend',env=env,check=True)
+ subprocess.run(['npm','run','test:'+args.suite],cwd=root/'backend',env=env,check=True)
 finally:
  subprocess.run(['docker','rm','--force',name],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)

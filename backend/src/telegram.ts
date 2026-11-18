@@ -54,7 +54,7 @@ export async function sendTelegram(text:string) {
 @Injectable()
 export class TelegramService implements OnModuleInit,OnModuleDestroy {
   readonly enabled=process.env.NOTIFICATIONS_ENABLED==='true';
-  readonly queue=new NotificationQueue(sendTelegram,Number(process.env.NOTIFICATION_COOLDOWN_MS||60000));
+  queue=new NotificationQueue(sendTelegram,Number(process.env.NOTIFICATION_COOLDOWN_MS||60000));
   private timer?:NodeJS.Timeout;
   onModuleInit(){
     if(this.enabled && (!process.env.TELEGRAM_BOT_TOKEN||!process.env.TELEGRAM_CHAT_ID))throw new Error('Enabled Telegram requires token and chat ID');

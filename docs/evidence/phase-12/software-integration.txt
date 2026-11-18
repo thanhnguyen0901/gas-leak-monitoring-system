@@ -1,0 +1,17 @@
+
+> gas-monitor-backend@0.1.0 test:system
+> npm run build && node --test dist/test/system.integration.js
+
+
+> gas-monitor-backend@0.1.0 build
+> tsc -p tsconfig.json
+
+✔ synthetic device → MQTT → NestJS → PostgreSQL → REST/WebSocket → mock Telegram (1624.459166ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1967.245459
