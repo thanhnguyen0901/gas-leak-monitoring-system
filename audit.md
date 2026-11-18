@@ -106,3 +106,11 @@ Static JSON/TOML and wiring checks are recorded in `docs/evidence/phase-01/stati
 Phase 0 is COMPLETED. Phase 1 remains IN PROGRESS: simulated input definition and sampling/Serial implementation are complete; the Wokwi input sweep and live response verification remain unchecked. Phase 2 and all later phases remain NOT STARTED.
 
 Next: run the canonical sketch and version-controlled circuit in Wokwi, vary the knob through low/middle/high and back, and record at least three consecutive readings per position plus live response under `docs/evidence/phase-01/`. Append the real observations to this audit and complete Phase 1 only if its exit criteria are met. Do not start Phase 2. No commit or push was performed.
+
+## 2026-11-18 — Phase 2
+
+Added the portable SAFE/WARNING/DANGER engine with simulation-only raw thresholds, hysteresis and fail-to-danger invalid input handling. Added the explicit user-authorized sequencing decision.
+
+Verification: Native C++ tests passed across all 4096 ADC values and boundary/recovery/invalid cases (`native.txt`). ESP32 compilation succeeded (`build.txt`). Wokwi transition observations remain deferred to final user testing.
+
+Status: IN PROGRESS. Evidence: `docs/evidence/phase-02/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.

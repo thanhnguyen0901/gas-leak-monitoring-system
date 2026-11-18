@@ -1,0 +1,1 @@
+State boundaries, hysteresis, jumps, invalid input and all 4096 rising inputs passed

@@ -1,4 +1,7 @@
 #include <Arduino.h>
+#include "GasState.h"
+
+GasStateEngine stateEngine;
 
 // Simulated gas signal only: raw ADC counts, not calibrated concentration.
 constexpr uint8_t GAS_INPUT_PIN = 34;
@@ -14,6 +17,8 @@ void setup() {
 void loop() {
   const int gasRawAdc = analogRead(GAS_INPUT_PIN);
   Serial.print("Gas raw ADC: ");
-  Serial.println(gasRawAdc);
+  Serial.print(gasRawAdc);
+  Serial.print(" State: ");
+  Serial.println(stateName(stateEngine.update(gasRawAdc)));
   delay(SAMPLE_INTERVAL_MS);
 }

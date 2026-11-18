@@ -2,7 +2,7 @@
 
 This document defines HOW and WHEN the system will be implemented. Requirements define scope; the audit records actual activity. Work proceeds one requested phase at a time, with simulation before physical integration.
 
-Phase 0 is COMPLETED based on the verified repository initialization recorded in `audit.md`. Phase 1 is IN PROGRESS; Phase 2 and all later phases are NOT STARTED. Checkboxes reflect completed work, with remaining verification identified explicitly.
+Phase 0 is COMPLETED. The user authorized implementing subsequent phases sequentially and committing each phase on 2026-11-18, with user acceptance testing deferred to the final handoff. This supersedes the earlier instruction to wait after Phase 1. Each phase below retains its actual verification status; IN PROGRESS can mean implementation delivered but simulation, external-service, or physical verification remains pending. Checkboxes describe completed work only.
 
 ## Phase 0 - Project Initialization
 
@@ -40,16 +40,16 @@ Phase 0 is COMPLETED based on the verified repository initialization recorded in
 
 ## Phase 2 - Gas State Engine
 
-**Status:** NOT STARTED
+**Status:** IN PROGRESS
 
 **Objective:** Classify gas input into SAFE, WARNING, and DANGER.
 
 **Tasks:**
 
-- [ ] Define simulated thresholds and boundary rules.
-- [ ] Implement SAFE / WARNING / DANGER classification and state transition logic.
-- [ ] Consider hysteresis and document the chosen behavior.
-- [ ] Test boundaries, rising/falling values, and recovery.
+- [x] Define simulated thresholds and boundary rules.
+- [x] Implement SAFE / WARNING / DANGER classification and state transition logic.
+- [x] Consider hysteresis and document the chosen behavior.
+- [x] Test boundaries, rising/falling values, and recovery.
 
 **Exit Criteria:** State transition tests and simulation verify all states and documented boundary/hysteresis behavior.
 
