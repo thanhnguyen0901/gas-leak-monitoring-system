@@ -1,0 +1,21 @@
+
+> gas-monitor-backend@0.1.0 test
+> npm run build && node --test dist/test/*.test.js
+
+
+> gas-monitor-backend@0.1.0 build
+> tsc -p tsconfig.json
+
+✔ reject malformed, mismatched and out-of-range MQTT data (2.412042ms)
+✔ MQTT to NestJS REST/WebSocket; alert deduplication and stale device status (394.884917ms)
+✔ warning, danger escalation, recovery, duplicate pending events and cooldown (0.716708ms)
+✔ delivery errors retry without blocking ingestion; rate-limit retry_after respected (0.204125ms)
+✔ bounded queue and failed delivery limit (0.266833ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5543.605667

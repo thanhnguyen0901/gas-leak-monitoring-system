@@ -178,3 +178,11 @@ Implemented a Vietnamese React/TypeScript/Vite dashboard with device selection, 
 Verification: TypeScript/Vite build and frontend history/offline unit tests passed. Browser desktop and 390px mobile rendering inspected; screenshots and accessibility snapshot saved using explicitly synthetic software-preview data through the real local backend. Backend shutdown was observed as offline in browser-offline.txt. No ESP32 or physical results are implied. Vite reports a non-fatal large bundle warning; React StrictMode may cancel its first development WebSocket connection.
 
 Status: COMPLETED. Evidence: `docs/evidence/phase-10/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.
+
+## 2026-11-18 — Phase 11
+
+Added opt-in Telegram delivery, warning/danger/recovery messages, severity-aware cooldown, pending-event deduplication, bounded worker queue and retry/backoff handling including Telegram rate limits. Ingestion never waits for Telegram HTTP.
+
+Verification: All 5 backend tests passed, including notification policy, recovery, duplicate/cooldown, retry_after and bounded retry/queue tests using mock delivery. No real Telegram message was sent. Live bot/chat acceptance remains manual. Queue and cooldown are RAM-only across backend restart.
+
+Status: IN PROGRESS. Evidence: `docs/evidence/phase-11/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.

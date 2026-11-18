@@ -3,6 +3,7 @@ import { connect, MqttClient } from 'mqtt';
 import { Alert, Device, Reading, parseReading } from './contracts';
 import { MonitorGateway } from './gateway';
 import { StorageService } from './storage';
+import { TelegramService } from './telegram';
 
 @Injectable()
 export class MonitorService implements OnModuleInit, OnModuleDestroy {
@@ -19,7 +20,7 @@ export class MonitorService implements OnModuleInit, OnModuleDestroy {
   mqttConnected = false;
   invalidMessages = 0;
   droppedMessages = 0;
-  constructor(private readonly gateway: MonitorGateway, private readonly storage: StorageService) {}
+  constructor(private readonly gateway: MonitorGateway, private readonly storage: StorageService, private readonly telegram: TelegramService) {}
   async onModuleInit() {
     await this.storage.ready();
     for (const d of await this.storage.loadDevices()) this.devices.set(d.id, { id:d.id, latest:d.latest, lastSeen:new Date(d.last_seen).toISOString(), online:false });
@@ -75,6 +76,7 @@ export class MonitorService implements OnModuleInit, OnModuleDestroy {
       if (this.seenAlerts.size > 10000) this.seenAlerts.delete(this.seenAlerts.values().next().value!);
       this.alerts.unshift(alert); this.alerts.length = Math.min(this.alerts.length, 1000);
       this.gateway.emit('alert', alert);
+      this.telegram.enqueue(alert);
       return;
     }
     const sequenceKey = `${sample.deviceId}:${sample.bootId}`;

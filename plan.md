@@ -173,16 +173,16 @@ Phase 0 is COMPLETED. The user authorized implementing subsequent phases sequent
 
 ## Phase 11 - Telegram Notifications
 
-**Status:** NOT STARTED
+**Status:** IN PROGRESS
 
 **Objective:** Send useful remote alerts without spam.
 
 **Tasks:**
 
-- [ ] Configure Telegram Bot API externally.
-- [ ] Send warning, danger, and recovery notifications.
-- [ ] Define and implement anti-spam handling and cooldown.
-- [ ] Test duplicate events, cooldown boundaries, and delivery failures.
+- [x] Configure Telegram Bot API externally.
+- [x] Send warning, danger, and recovery notifications.
+- [x] Define and implement anti-spam handling and cooldown.
+- [x] Test duplicate events, cooldown boundaries, and delivery failures.
 
 **Exit Criteria:** Notification tests verify warning/danger/recovery and cooldown behavior without affecting local safety.
 
