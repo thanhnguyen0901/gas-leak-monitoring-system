@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#include "GasState.h"
 #if defined(GAS_CONFIG_HEADER)
 #define GAS_STRINGIFY_INNER(value) #value
 #define GAS_STRINGIFY(value) GAS_STRINGIFY_INNER(value)
@@ -12,3 +13,5 @@
 
 static_assert(Config::SIMULATED_INPUT || Config::CALIBRATION_CONFIRMED,
               "Physical mode requires reviewed real hardware calibration");
+static_assert(Thresholds{Config::WARNING_ADC, Config::DANGER_ADC, Config::HYSTERESIS_ADC}.valid(),
+              "Raw ADC threshold configuration is invalid");

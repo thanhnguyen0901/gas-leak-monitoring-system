@@ -202,3 +202,11 @@ Prepared physical GPIO mapping, configurable raw thresholds/relay polarity and a
 Verification: Default ESP32 build passed. A temporary network-enabled simulation profile (Wokwi-GUEST, example.invalid broker, no real credentials) also linked successfully: 1056321 bytes flash, 49644 bytes globals. Host compile tests verify physical mode is rejected unless explicitly confirmed. No hardware was flashed, wired or measured; all physical tasks remain unchecked.
 
 Status: IN PROGRESS. Evidence: `docs/evidence/phase-13/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.
+
+## 2026-11-18 — Phase 14
+
+Added raw ADC reference-data analysis utility, overlap/range/provenance validation, candidate thresholds for review only, hardware calibration procedure and compile-time threshold validation. No ppm conversion or automatic calibration approval is implemented.
+
+Verification: Two Python tests using explicitly synthetic fixtures passed, hardware-mode guard tests passed and ESP32 compilation succeeded. Real reference measurements, approved hardware thresholds and calibration evidence do not exist yet; those phase tasks remain unchecked.
+
+Status: IN PROGRESS. Evidence: `docs/evidence/phase-14/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.

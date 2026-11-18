@@ -15,7 +15,7 @@ struct Thresholds {
   int warning = 1400;
   int danger = 2800;
   int hysteresis = 150;
-  bool valid() const {
+  constexpr bool valid() const {
     return warning > hysteresis && danger > warning + hysteresis &&
            danger <= 4095 && hysteresis >= 0;
   }

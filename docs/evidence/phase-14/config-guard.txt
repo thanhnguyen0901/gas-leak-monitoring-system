@@ -1,0 +1,1 @@
+Simulation allowed; unconfirmed physical profile rejected; explicitly confirmed profile accepted. No real calibration is implied.
