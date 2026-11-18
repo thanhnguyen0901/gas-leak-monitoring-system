@@ -1,0 +1,18 @@
+
+> gas-monitor-dashboard@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v7.3.8 building client environment for production...
+transforming...
+✓ 469 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.71 kB │ gzip:   0.47 kB
+dist/assets/index-D_BiWcuL.css    6.16 kB │ gzip:   2.01 kB
+dist/assets/index-B6Fwn92F.js   696.08 kB │ gzip: 207.33 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.42s

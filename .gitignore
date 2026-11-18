@@ -71,3 +71,6 @@ pnpm-debug.log*
 
 # Local firmware credentials and calibrated hardware configuration
 config.local.h
+
+# Browser tooling scratch output; curated evidence is tracked separately
+.playwright-mcp/

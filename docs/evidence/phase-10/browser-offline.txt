@@ -1,0 +1,86 @@
+- generic [active] [ref=f2e1]:
+  - main [ref=f2e4]:
+    - generic [ref=f2e5]:
+      - generic [ref=f2e6]:
+        - paragraph [ref=f2e7]: HỆ THỐNG GIÁM SÁT KHÍ GAS
+        - heading "Trạm giám sát." [level=1] [ref=f2e8]
+        - paragraph [ref=f2e9]: Theo dõi tín hiệu, cảnh báo và trạng thái thông gió.
+      - generic [ref=f2e10]: Mất kết nối máy chủ
+    - alert [ref=f2e12]:
+      - text: Chưa kết nối được máy chủ. Kiểm tra backend và cấu hình truy cập.
+      - button "Thử lại" [ref=f2e13] [cursor=pointer]
+    - generic [ref=f2e14]:
+      - generic [ref=f2e15]:
+        - text: "01"
+        - strong [ref=f2e16]: Tổng quan thiết bị
+      - generic [ref=f2e17]:
+        - text: Thiết bị
+        - combobox "Chọn thiết bị" [ref=f2e18]:
+          - option "Chọn thiết bị" [disabled]
+          - option "software-preview" [selected]
+    - generic [ref=f2e19]:
+      - article [ref=f2e20]:
+        - text: TÍN HIỆU GAS
+        - generic [ref=f2e21]: 1923 ADC
+        - paragraph [ref=f2e24]: Tín hiệu mô phỏng · 0–4095
+      - article [ref=f2e25]:
+        - text: TRẠNG THÁI
+        - heading "Ngoại tuyến" [level=2] [ref=f2e26]
+        - paragraph [ref=f2e27]: "Ghi nhận cuối: WARNING"
+        - generic [ref=f2e28]: ○ CHƯA CÓ TÍN HIỆU MỚI
+      - article [ref=f2e29]:
+        - text: THÔNG GIÓ
+        - heading "Đang bật" [level=2] [ref=f2e30]
+        - paragraph [ref=f2e31]: Trạng thái cuối được báo cáo
+        - generic [ref=f2e32]: ✣
+    - generic [ref=f2e33]:
+      - generic [ref=f2e34]:
+        - generic [ref=f2e35]:
+          - generic [ref=f2e36]: "02"
+          - heading "Diễn biến tín hiệu" [level=2] [ref=f2e37]
+        - generic [ref=f2e38]: RAW ADC · 29 bản ghi
+      - application [ref=f2e42]:
+        - generic [ref=f2e52]:
+          - generic [ref=f2e53]:
+            - generic [ref=f2e54]: 19:38:37
+            - generic [ref=f2e56]: 19:39:01
+            - generic [ref=f2e58]: 19:39:27
+          - generic [ref=f2e60]:
+            - generic [ref=f2e61]: "0"
+            - generic [ref=f2e63]: "1500"
+            - generic [ref=f2e65]: "3000"
+            - generic [ref=f2e67]: "4095"
+      - paragraph [ref=f2e69]: Giá trị ADC thô chưa được quy đổi thành nồng độ ppm. Dữ liệu cũ có thể được hiển thị khi thiết bị ngoại tuyến.
+    - generic [ref=f2e70]:
+      - generic [ref=f2e71]:
+        - generic [ref=f2e72]:
+          - generic [ref=f2e73]: "03"
+          - heading "Lịch sử cảnh báo" [level=2] [ref=f2e74]
+        - generic [ref=f2e75]: 3 sự kiện gần nhất
+      - table [ref=f2e77]:
+        - rowgroup [ref=f2e78]:
+          - row [ref=f2e79]:
+            - columnheader "THỜI GIAN NHẬN" [ref=f2e80]
+            - columnheader "THAY ĐỔI TRẠNG THÁI" [ref=f2e81]
+            - columnheader "RAW ADC" [ref=f2e82]
+            - columnheader "SỰ KIỆN" [ref=f2e83]
+        - rowgroup [ref=f2e84]:
+          - row [ref=f2e85]:
+            - cell "19:39:23 18/11/2026" [ref=f2e86]
+            - cell "SAFE → WARNING" [ref=f2e87]
+            - cell "1437" [ref=f2e88]
+            - cell "Cảnh báo" [ref=f2e89]
+          - row [ref=f2e91]:
+            - cell "19:38:55 18/11/2026" [ref=f2e92]
+            - cell "WARNING → SAFE" [ref=f2e93]
+            - cell "1355" [ref=f2e94]
+            - cell "Phục hồi" [ref=f2e95]
+          - row [ref=f2e97]:
+            - cell "19:38:33 18/11/2026" [ref=f2e98]
+            - cell "SAFE → WARNING" [ref=f2e99]
+            - cell "1472" [ref=f2e100]
+            - cell "Cảnh báo" [ref=f2e101]
+    - generic [ref=f2e103]:
+      - generic [ref=f2e104]: GAS MONITOR / ESP32 + IoT
+      - generic [ref=f2e105]: Cảnh báo và thông gió được xử lý tại ESP32.
+  - generic [aria-hidden] [ref=f2e106]: 19:39:27

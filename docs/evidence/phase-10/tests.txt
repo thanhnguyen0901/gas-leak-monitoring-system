@@ -1,0 +1,14 @@
+
+> gas-monitor-dashboard@0.1.0 test
+> node --import tsx --test test/*.test.ts
+
+✔ history merges concurrent HTTP/socket data without duplicates; preserves reboot identity and time order (1.042708ms)
+✔ alerts deduplicate; disconnected backend never reports current online status (0.102291ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 121.99575
