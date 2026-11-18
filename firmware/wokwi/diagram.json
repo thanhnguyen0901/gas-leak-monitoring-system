@@ -90,6 +90,34 @@
       "attrs": {
         "i2cAddress": "0x3c"
       }
+    },
+    {
+      "type": "wokwi-relay-module",
+      "id": "relay",
+      "top": 400,
+      "left": 0,
+      "attrs": {
+        "transistor": "npn"
+      }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "fanLoad",
+      "top": 430,
+      "left": 300,
+      "attrs": {
+        "color": "blue",
+        "label": "SIMULATED FAN LOAD"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "fanR",
+      "top": 470,
+      "left": 220,
+      "attrs": {
+        "value": "220"
+      }
     }
   ],
   "connections": [
@@ -199,6 +227,48 @@
       "oled:SCL",
       "esp:22",
       "purple",
+      []
+    ],
+    [
+      "relay:VCC",
+      "esp:VIN",
+      "red",
+      []
+    ],
+    [
+      "relay:GND",
+      "esp:GND.1",
+      "black",
+      []
+    ],
+    [
+      "relay:IN",
+      "esp:33",
+      "orange",
+      []
+    ],
+    [
+      "relay:COM",
+      "esp:3V3",
+      "red",
+      []
+    ],
+    [
+      "relay:NO",
+      "fanR:1",
+      "blue",
+      []
+    ],
+    [
+      "fanR:2",
+      "fanLoad:A",
+      "blue",
+      []
+    ],
+    [
+      "fanLoad:C",
+      "esp:GND.1",
+      "black",
       []
     ]
   ]

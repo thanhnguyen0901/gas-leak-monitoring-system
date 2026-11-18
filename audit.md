@@ -130,3 +130,11 @@ Added SSD1306 I2C display on SDA21/SCL22 at 0x3C showing raw ADC, gas state and 
 Verification: ESP32 compilation succeeded using Adafruit SSD1306 2.5.17, GFX 1.13.0 and BusIO 1.17.4. Display absence does not prevent sampling; Wire timeout is bounded. Visual display verification remains deferred.
 
 Status: IN PROGRESS. Evidence: `docs/evidence/phase-04/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.
+
+## 2026-11-18 — Phase 5
+
+Added local relay control on GPIO33, active high in Wokwi. Fan runs for WARNING or DANGER and stops in SAFE after hysteresis recovery. The relay switches a blue LED representing a fan load, not a motor simulation.
+
+Verification: ESP32 compilation and native fan/state-output tests passed. Relay switching and actual fan electrical/airflow behavior remain manual checks. Physical relay polarity must be verified.
+
+Status: IN PROGRESS. Evidence: `docs/evidence/phase-05/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.

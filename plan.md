@@ -83,14 +83,14 @@ Phase 0 is COMPLETED. The user authorized implementing subsequent phases sequent
 
 ## Phase 5 - Relay and Fan Control
 
-**Status:** NOT STARTED
+**Status:** IN PROGRESS
 
 **Objective:** Respond automatically to unsafe gas states.
 
 **Tasks:**
 
-- [ ] Define relay polarity and local fan activation/recovery rules.
-- [ ] Simulate relay and fan control from the state engine.
+- [x] Define relay polarity and local fan activation/recovery rules.
+- [x] Simulate relay and fan control from the state engine.
 - [ ] Verify control across all states.
 
 **Exit Criteria:** Simulation verifies relay/fan behavior according to documented rules without networking.

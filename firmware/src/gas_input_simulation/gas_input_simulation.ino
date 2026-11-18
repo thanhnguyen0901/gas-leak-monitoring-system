@@ -6,6 +6,8 @@ StatusDisplay display;
 
 constexpr uint8_t GAS_INPUT_PIN = 34;
 constexpr uint8_t GREEN_PIN = 25, YELLOW_PIN = 26, RED_PIN = 27, BUZZER_PIN = 32;
+constexpr uint8_t RELAY_PIN = 33;
+constexpr bool RELAY_ACTIVE_LOW = false; // Wokwi NPN relay; verify actual module polarity.
 constexpr uint32_t SAMPLE_INTERVAL_MS = 500;
 GasStateEngine stateEngine;
 GasState gasState = GasState::SAFE;
@@ -19,6 +21,8 @@ void setup() {
   analogReadResolution(12);
   for (auto pin : {GREEN_PIN, YELLOW_PIN, RED_PIN}) pinMode(pin, OUTPUT);
   ledcAttach(BUZZER_PIN, 2000, 8);
+  pinMode(RELAY_PIN, OUTPUT);
+  digitalWrite(RELAY_PIN, RELAY_ACTIVE_LOW ? HIGH : LOW);
   display.begin();
 }
 
@@ -37,5 +41,6 @@ void loop() {
   digitalWrite(YELLOW_PIN, out.yellow);
   digitalWrite(RED_PIN, out.red);
   ledcWriteTone(BUZZER_PIN, out.buzzer ? 2000 : 0);
+  digitalWrite(RELAY_PIN, (out.fan != RELAY_ACTIVE_LOW) ? HIGH : LOW);
   delay(5);  // Yield only; sampling and warning patterns use millis().
 }
