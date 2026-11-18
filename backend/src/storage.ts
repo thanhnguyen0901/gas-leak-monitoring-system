@@ -31,6 +31,13 @@ export class StorageService implements OnModuleDestroy {
     if (process.env.MIGRATE_ON_START==='true') await migrate(this.pool);
     await this.pool.query('SELECT id FROM devices LIMIT 1');
   }
+  async available() {
+    if (!this.pool) return true;
+    try { await this.pool.query('SELECT 1'); return true; } catch { return false; }
+  }
+  async knownBoot(id:string,boot:string) {
+    return this.pool ? Boolean((await this.pool.query('SELECT 1 FROM gas_readings WHERE device_id=$1 AND boot_id=$2 LIMIT 1',[id,boot])).rowCount) : false;
+  }
   async loadDevices() { return this.pool ? (await this.pool.query('SELECT id, last_seen, latest FROM devices')).rows : []; }
   async saveReading(reading: Reading) {
     if (!this.pool) return true;

@@ -12,6 +12,7 @@ export class MonitorService implements OnModuleInit, OnModuleDestroy {
   protected alerts: Alert[] = [];
   protected seenAlerts = new Set<string>();
   private latestSequences = new Map<string, number>();
+  private retiredBoots = new Set<string>();
   private client?: MqttClient;
   private timer?: NodeJS.Timeout;
   private pending = Promise.resolve();
@@ -80,9 +81,14 @@ export class MonitorService implements OnModuleInit, OnModuleDestroy {
       return;
     }
     const sequenceKey = `${sample.deviceId}:${sample.bootId}`;
+    const current=this.devices.get(sample.deviceId)?.latest;
+    if(current?.bootId===sample.bootId && sample.sequence<=current.sequence)return;
+    if(current && current.bootId!==sample.bootId && (this.retiredBoots.has(sequenceKey)||await this.storage.knownBoot(sample.deviceId,sample.bootId)))return;
     if (sample.sequence <= (this.latestSequences.get(sequenceKey) ?? -1)) return;
     if (!this.devices.has(sample.deviceId) && this.devices.size >= 1000) throw new Error('Device capacity reached');
     if (!await this.storage.saveReading(sample)) return;
+    if(current && current.bootId!==sample.bootId) this.retiredBoots.add(`${sample.deviceId}:${current.bootId}`);
+    if(this.retiredBoots.size>2000)this.retiredBoots.delete(this.retiredBoots.values().next().value!);
     this.latestSequences.set(sequenceKey, sample.sequence);
     if (this.latestSequences.size > 2000) this.latestSequences.delete(this.latestSequences.keys().next().value!);
     this.readings.unshift(sample); this.readings.length = Math.min(this.readings.length, 2000);
@@ -96,5 +102,5 @@ export class MonitorService implements OnModuleInit, OnModuleDestroy {
   }
   async getReadings(id: string, limit: number) { return this.storage.pool ? this.storage.history(id,limit) : this.readings.filter(r => r.deviceId === id).slice(0, limit); }
   async getAlerts(id: string | undefined, limit: number) { return this.storage.pool ? this.storage.alertHistory(id,limit) : this.alerts.filter(a => !id || a.deviceId === id).slice(0, limit); }
-  health() { return { status: 'ok', storage: this.storage.pool ? 'postgresql' : 'memory', mqttConnected: this.mqttConnected, invalidMessages: this.invalidMessages, droppedMessages: this.droppedMessages }; }
+  async health() { const storageAvailable=await this.storage.available(); return { status: storageAvailable?'ok':'degraded', storageAvailable, notifications: {enabled:this.telegram.enabled, queued:this.telegram.queue.size, delivered:this.telegram.queue.delivered, dropped:this.telegram.queue.dropped}, storage: this.storage.pool ? 'postgresql' : 'memory', mqttConnected: this.mqttConnected, invalidMessages: this.invalidMessages, droppedMessages: this.droppedMessages }; }
 }

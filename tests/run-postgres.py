@@ -16,7 +16,8 @@ try:
   time.sleep(.5)
  else: raise RuntimeError('PostgreSQL did not become ready')
  port=subprocess.check_output(['docker','port',name,'5432/tcp'],text=True).strip().rsplit(':',1)[1]
- env.update(DATABASE_URL=f'postgres://postgres:{password}@127.0.0.1:{port}/postgres')
+ env.update(DATABASE_URL=f'postgres://postgres:{password}@127.0.0.1:{port}/postgres',GAS_TEST_DB_CONTAINER=name)
  subprocess.run(['npm','run','test:'+args.suite],cwd=root/'backend',env=env,check=True)
 finally:
+ subprocess.run(['docker','unpause',name],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
  subprocess.run(['docker','rm','--force',name],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)

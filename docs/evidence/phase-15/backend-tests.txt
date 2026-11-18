@@ -1,0 +1,22 @@
+
+> gas-monitor-backend@0.1.0 test
+> npm run build && node --test dist/test/*.test.js
+
+
+> gas-monitor-backend@0.1.0 build
+> tsc -p tsconfig.json
+
+✔ reject invalid numeric and boolean runtime configuration (0.54175ms)
+✔ reject malformed, mismatched and out-of-range MQTT data (2.258375ms)
+✔ MQTT to NestJS REST/WebSocket; alert deduplication and stale device status (405.712292ms)
+✔ warning, danger escalation, recovery, duplicate pending events and cooldown (0.648625ms)
+✔ delivery errors retry without blocking ingestion; rate-limit retry_after respected (0.16025ms)
+✔ bounded queue and failed delivery limit (0.254334ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5550.993333

@@ -1,7 +1,9 @@
 import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app';
+import { validateEnvironment } from './config';
 export async function createApp() {
+  validateEnvironment();
   const app = await NestFactory.create(AppModule, { logger: ['error', 'warn'] });
   app.enableCors({ origin: (process.env.WEB_ORIGIN || 'http://localhost:5173').split(',') });
   app.enableShutdownHooks();

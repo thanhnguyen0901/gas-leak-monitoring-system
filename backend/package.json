@@ -12,7 +12,8 @@
     "test": "npm run build && node --test dist/test/*.test.js",
     "migrate": "npm run build && node --env-file-if-exists=.env dist/src/migrate.js",
     "test:db": "npm run build && node --test dist/test/postgres.integration.js",
-    "test:system": "npm run build && node --test dist/test/system.integration.js"
+    "test:system": "npm run build && node --test dist/test/system.integration.js",
+    "test:failure": "npm run build && node --test dist/test/failure.integration.js"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",

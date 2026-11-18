@@ -210,3 +210,11 @@ Added raw ADC reference-data analysis utility, overlap/range/provenance validati
 Verification: Two Python tests using explicitly synthetic fixtures passed, hardware-mode guard tests passed and ESP32 compilation succeeded. Real reference measurements, approved hardware thresholds and calibration evidence do not exist yet; those phase tasks remain unchecked.
 
 Status: IN PROGRESS. Evidence: `docs/evidence/phase-14/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.
+
+## 2026-11-18 — Phase 15
+
+Added real backend outage/reconnect tests, stale/retired-boot protection, database-aware health and runtime configuration validation. Moved OLED I2C work to its own bounded-queue task so the core safety loop does not draw frames. Added an explicit failure matrix.
+
+Verification: Actual temporary MQTT shutdown/restart and PostgreSQL pause/unpause tests passed; all 6 backend regression tests passed; firmware compiled. Actual ESP32/Wokwi Wi-Fi outages, local output continuity and physical sensor/reset faults remain pending, so phase exit is not claimed.
+
+Status: IN PROGRESS. Evidence: `docs/evidence/phase-15/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.
