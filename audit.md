@@ -162,3 +162,11 @@ Implemented NestJS MQTT ingestion, strict v1 payload validation, bounded in-memo
 Verification: npm test passed: TypeScript build, invalid-payload tests and a real temporary MQTT broker → NestJS → REST/WebSocket test, including duplicate alerts and stale data. This verifies software transport, not ESP32/Wokwi or external HiveMQ.
 
 Status: COMPLETED. Evidence: `docs/evidence/phase-08/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.
+
+## 2026-11-18 — Phase 9
+
+Added transactional PostgreSQL persistence for devices, gas_readings and alerts, versioned/idempotent SQL migration, uniqueness/ADC/state constraints and historical REST queries. Added an isolated throwaway-container DB test runner. Empty DATABASE_URL remains explicitly ephemeral memory mode.
+
+Verification: Real PostgreSQL 16 Docker tests passed: migrations, repeat application, duplicate suppression, invalid ADC rollback and persistence across storage reconnect. MQTT/API/WebSocket regression tests passed. Temporary test container removed.
+
+Status: COMPLETED. Evidence: `docs/evidence/phase-09/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.

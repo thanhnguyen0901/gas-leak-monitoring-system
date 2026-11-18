@@ -143,15 +143,15 @@ Phase 0 is COMPLETED. The user authorized implementing subsequent phases sequent
 
 ## Phase 9 - PostgreSQL
 
-**Status:** NOT STARTED
+**Status:** COMPLETED
 
 **Objective:** Persist devices, readings, and alert history.
 
 **Tasks:**
 
-- [ ] Define devices, gas readings, and alerts schema.
-- [ ] Implement migrations and backend persistence.
-- [ ] Test storage and historical retrieval.
+- [x] Define devices, gas readings, and alerts schema.
+- [x] Implement migrations and backend persistence.
+- [x] Test storage and historical retrieval.
 
 **Exit Criteria:** Database integration tests verify migrations and device/reading/alert persistence and retrieval.
 

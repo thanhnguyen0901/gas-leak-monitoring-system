@@ -2,6 +2,7 @@ import { Injectable, OnModuleInit, OnModuleDestroy, Logger } from '@nestjs/commo
 import { connect, MqttClient } from 'mqtt';
 import { Alert, Device, Reading, parseReading } from './contracts';
 import { MonitorGateway } from './gateway';
+import { StorageService } from './storage';
 
 @Injectable()
 export class MonitorService implements OnModuleInit, OnModuleDestroy {
@@ -18,8 +19,10 @@ export class MonitorService implements OnModuleInit, OnModuleDestroy {
   mqttConnected = false;
   invalidMessages = 0;
   droppedMessages = 0;
-  constructor(private readonly gateway: MonitorGateway) {}
+  constructor(private readonly gateway: MonitorGateway, private readonly storage: StorageService) {}
   async onModuleInit() {
+    await this.storage.ready();
+    for (const d of await this.storage.loadDevices()) this.devices.set(d.id, { id:d.id, latest:d.latest, lastSeen:new Date(d.last_seen).toISOString(), online:false });
     this.timer = setInterval(() => this.gateway.emit('devices', this.getDevices()), 1000);
     const url = process.env.MQTT_URL;
     if (!url) return;
@@ -67,7 +70,7 @@ export class MonitorService implements OnModuleInit, OnModuleDestroy {
     if (kind === 'alert') {
       if (sample.previousState === sample.state || this.seenAlerts.has(key)) return;
       const alert: Alert = { ...sample, id: key, recovery: sample.state === 'SAFE' };
-      await this.saveAlert(alert);
+      if (!await this.storage.saveAlert(alert)) return;
       this.seenAlerts.add(key);
       if (this.seenAlerts.size > 10000) this.seenAlerts.delete(this.seenAlerts.values().next().value!);
       this.alerts.unshift(alert); this.alerts.length = Math.min(this.alerts.length, 1000);
@@ -77,7 +80,7 @@ export class MonitorService implements OnModuleInit, OnModuleDestroy {
     const sequenceKey = `${sample.deviceId}:${sample.bootId}`;
     if (sample.sequence <= (this.latestSequences.get(sequenceKey) ?? -1)) return;
     if (!this.devices.has(sample.deviceId) && this.devices.size >= 1000) throw new Error('Device capacity reached');
-    await this.saveReading(sample);
+    if (!await this.storage.saveReading(sample)) return;
     this.latestSequences.set(sequenceKey, sample.sequence);
     if (this.latestSequences.size > 2000) this.latestSequences.delete(this.latestSequences.keys().next().value!);
     this.readings.unshift(sample); this.readings.length = Math.min(this.readings.length, 2000);
@@ -85,13 +88,11 @@ export class MonitorService implements OnModuleInit, OnModuleDestroy {
     this.gateway.emit('reading', sample);
     this.gateway.emit('devices', this.getDevices());
   }
-  protected async saveReading(_reading: Reading): Promise<void> {}
-  protected async saveAlert(_alert: Alert): Promise<void> {}
   getDevices() {
     const timeout = Number(process.env.STALE_AFTER_MS || 10000);
     return [...this.devices.values()].map(d => ({ ...d, online: d.online && Date.now()-Date.parse(d.lastSeen) < timeout }));
   }
-  async getReadings(id: string, limit: number) { return this.readings.filter(r => r.deviceId === id).slice(0, limit); }
-  async getAlerts(id: string | undefined, limit: number) { return this.alerts.filter(a => !id || a.deviceId === id).slice(0, limit); }
-  health() { return { status: 'ok', storage: 'memory', mqttConnected: this.mqttConnected, invalidMessages: this.invalidMessages, droppedMessages: this.droppedMessages }; }
+  async getReadings(id: string, limit: number) { return this.storage.pool ? this.storage.history(id,limit) : this.readings.filter(r => r.deviceId === id).slice(0, limit); }
+  async getAlerts(id: string | undefined, limit: number) { return this.storage.pool ? this.storage.alertHistory(id,limit) : this.alerts.filter(a => !id || a.deviceId === id).slice(0, limit); }
+  health() { return { status: 'ok', storage: this.storage.pool ? 'postgresql' : 'memory', mqttConnected: this.mqttConnected, invalidMessages: this.invalidMessages, droppedMessages: this.droppedMessages }; }
 }

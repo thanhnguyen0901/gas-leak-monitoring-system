@@ -1,4 +1,5 @@
 import { CanActivate, Controller, ExecutionContext, Get, Injectable, Module, Param, Query, UnauthorizedException, UseGuards, BadRequestException } from '@nestjs/common';
+import { StorageService } from './storage';
 import { MonitorService } from './monitor';
 import { MonitorGateway } from './gateway';
 import { deviceId } from './contracts';
@@ -27,5 +28,5 @@ class ApiController {
   @Get('devices/:id/readings') readings(@Param('id') id: string, @Query('limit') limit?: string) { return this.monitor.getReadings(idOf(id), limitOf(limit)); }
   @Get('alerts') alerts(@Query('deviceId') id?: string, @Query('limit') limit?: string) { return this.monitor.getAlerts(id === undefined ? undefined : idOf(id), limitOf(limit)); }
 }
-@Module({ controllers: [ApiController], providers: [MonitorService, MonitorGateway] })
+@Module({ controllers: [ApiController], providers: [StorageService, MonitorService, MonitorGateway] })
 export class AppModule {}

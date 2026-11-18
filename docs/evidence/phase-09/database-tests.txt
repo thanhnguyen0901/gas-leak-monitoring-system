@@ -1,0 +1,17 @@
+
+> gas-monitor-backend@0.1.0 test:db
+> npm run build && node --test dist/test/postgres.integration.js
+
+
+> gas-monitor-backend@0.1.0 build
+> tsc -p tsconfig.json
+
+✔ real PostgreSQL migration, idempotence, constraints, history and restart (54.886458ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 166.934875
