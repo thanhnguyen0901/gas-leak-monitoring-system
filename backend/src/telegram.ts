@@ -1,7 +1,7 @@
-import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import { Injectable, Inject, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { Alert } from './contracts';
 import { StorageService } from './storage';
-import { NotificationPolicy, emptyPolicy, shouldNotify, deliveredPolicy, notificationText, retryDelay, RetryableDeliveryError } from './notification-policy';
+import { NotificationPolicy, emptyPolicy, shouldNotify, deliveredPolicy, notificationText, observedPolicy, retryDelay, RetryableDeliveryError } from './notification-policy';
 export { RetryableDeliveryError } from './notification-policy';
 export class NotificationQueue {
   private pending: {alert:Alert;attempts:number;next:number}[]=[];
@@ -21,7 +21,7 @@ export class NotificationQueue {
     const item=this.pending[0];if(!item||item.next>now)return;
     const a=item.alert,policy=this.policies.get(a.deviceId)??emptyPolicy();
     const shouldSend=shouldNotify(a,policy,now,this.cooldown);
-    if(!shouldSend){this.remove();return;}
+    if(!shouldSend){this.policies.set(a.deviceId,observedPolicy(a,policy,true));this.remove();return;}
     this.busy=true;
     try {
       await this.send(notificationText(a));
@@ -30,6 +30,7 @@ export class NotificationQueue {
       this.delivered++;this.remove();
     } catch(error) {
       item.attempts++;
+      this.policies.set(a.deviceId,observedPolicy(a,policy,item.attempts>=5));
       if(item.attempts>=5){this.dropped++;this.remove();}
       else item.next=now+retryDelay(error,item.attempts);
     } finally {this.busy=false;}
@@ -56,7 +57,7 @@ export class TelegramService implements OnModuleInit,OnModuleDestroy {
   private timer?:NodeJS.Timeout;
   private running?:Promise<void>;
   errors=0;
-  constructor(private readonly storage:StorageService){}
+  constructor(@Inject(StorageService) private readonly storage:StorageService){}
   async onModuleInit(){
     if(this.enabled && (!process.env.TELEGRAM_BOT_TOKEN||!process.env.TELEGRAM_CHAT_ID))throw new Error('Enabled Telegram requires token and chat ID');
     await this.storage.ready();

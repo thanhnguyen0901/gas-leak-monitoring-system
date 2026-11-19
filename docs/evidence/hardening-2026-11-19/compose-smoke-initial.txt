@@ -1,0 +1,403 @@
+Checking public image node:22-alpine
+22-alpine: Pulling from library/node
+d7c36ecc3656: Pulling fs layer
+b90627b8f429: Pulling fs layer
+bec7aaabd7f9: Pulling fs layer
+1d0a73052429: Pulling fs layer
+d7c36ecc3656: Download complete
+4f70adc3ae0c: Download complete
+bec7aaabd7f9: Download complete
+953588d6a55a: Download complete
+b90627b8f429: Download complete
+b90627b8f429: Pull complete
+1d0a73052429: Download complete
+1d0a73052429: Pull complete
+d7c36ecc3656: Pull complete
+bec7aaabd7f9: Pull complete
+Digest: sha256:1314fb30ec37592d5845e5a160d522c0e680972aa534549940b8d73bde88481a
+Status: Downloaded newer image for node:22-alpine
+docker.io/library/node:22-alpine
+Checking public image nginxinc/nginx-unprivileged:alpine
+alpine: Pulling from nginxinc/nginx-unprivileged
+a9986cd6f37d: Pulling fs layer
+b75fea50b323: Pulling fs layer
+d74d0cecaf1a: Pulling fs layer
+115972ae778a: Pulling fs layer
+98f56d1336e8: Pulling fs layer
+581a829fa84a: Pulling fs layer
+4bc482c4f270: Pulling fs layer
+2fe8f2a34241: Pulling fs layer
+4b40f23576bc: Pulling fs layer
+98f56d1336e8: Download complete
+4b40f23576bc: Download complete
+115972ae778a: Download complete
+581a829fa84a: Download complete
+2fe8f2a34241: Download complete
+4bc482c4f270: Download complete
+44136fa355b3: Download complete
+6d3d1b87b4a8: Download complete
+a9986cd6f37d: Download complete
+a9986cd6f37d: Pull complete
+d74d0cecaf1a: Download complete
+98f56d1336e8: Pull complete
+4b40f23576bc: Pull complete
+115972ae778a: Pull complete
+581a829fa84a: Pull complete
+2fe8f2a34241: Pull complete
+4bc482c4f270: Pull complete
+d74d0cecaf1a: Pull complete
+b75fea50b323: Download complete
+b75fea50b323: Pull complete
+Digest: sha256:b5047b9b76845eac124358373c6852377c52e4b05834a47647e955dd91cb8f1e
+Status: Downloaded newer image for nginxinc/nginx-unprivileged:alpine
+docker.io/nginxinc/nginx-unprivileged:alpine
+Checking public image eclipse-mosquitto:2
+2: Pulling from library/eclipse-mosquitto
+25a98294cfa3: Pulling fs layer
+0e4b79315da2: Pulling fs layer
+25a98294cfa3: Download complete
+54e64efdd8ea: Download complete
+9ed8a50de859: Download complete
+0e4b79315da2: Download complete
+25a98294cfa3: Pull complete
+0e4b79315da2: Pull complete
+Digest: sha256:fa12172a051310efe5bcb7a6a11b77bd5faacb82cbacd7742aa758bf024fd8e4
+Status: Downloaded newer image for eclipse-mosquitto:2
+docker.io/library/eclipse-mosquitto:2
+ Image gas-qa-e01967cc-backend Building
+ Image gas-qa-e01967cc-frontend Building
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.24kB done
+#1 DONE 0.0s
+
+#2 [frontend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 364B done
+#2 WARN: SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "VITE_APP_TOKEN") (line 7)
+#2 WARN: SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ENV "VITE_APP_TOKEN") (line 8)
+#2 DONE 0.0s
+
+#3 [backend internal] load build definition from Dockerfile
+#3 transferring dockerfile: 446B done
+#3 DONE 0.0s
+
+#4 [backend internal] load metadata for docker.io/library/node:22-alpine
+#4 DONE 0.0s
+
+#5 [frontend internal] load metadata for docker.io/nginxinc/nginx-unprivileged:alpine
+#5 DONE 0.0s
+
+#6 [backend internal] load .dockerignore
+#6 transferring context: 70B done
+#6 DONE 0.0s
+
+#7 [frontend internal] load .dockerignore
+#7 transferring context: 70B done
+#7 DONE 0.0s
+
+#8 [backend internal] load build context
+#8 transferring context: 165.09kB done
+#8 DONE 0.0s
+
+#9 [frontend internal] load build context
+#9 transferring context: 110.32kB done
+#9 DONE 0.0s
+
+#10 [backend build 1/6] FROM docker.io/library/node:22-alpine@sha256:1314fb30ec37592d5845e5a160d522c0e680972aa534549940b8d73bde88481a
+#10 resolve docker.io/library/node:22-alpine@sha256:1314fb30ec37592d5845e5a160d522c0e680972aa534549940b8d73bde88481a 0.0s done
+#10 DONE 0.1s
+
+#11 [frontend stage-1 1/2] FROM docker.io/nginxinc/nginx-unprivileged:alpine@sha256:b5047b9b76845eac124358373c6852377c52e4b05834a47647e955dd91cb8f1e
+#11 resolve docker.io/nginxinc/nginx-unprivileged:alpine@sha256:b5047b9b76845eac124358373c6852377c52e4b05834a47647e955dd91cb8f1e 0.0s done
+#11 DONE 0.3s
+
+#12 [frontend build 2/6] WORKDIR /app
+#12 DONE 0.2s
+
+#13 [frontend build 3/6] COPY package*.json ./
+#13 DONE 0.0s
+
+#14 [backend build 3/8] COPY package*.json ./
+#14 DONE 0.0s
+
+#15 [backend stage-1 4/6] RUN npm ci --omit=dev && npm cache clean --force
+#15 ...
+
+#16 [backend build 4/8] RUN npm ci
+#16 3.368 npm warn deprecated uuid@10.0.0: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
+#16 ...
+
+#17 [frontend build 4/6] RUN npm ci
+#17 ...
+
+#16 [backend build 4/8] RUN npm ci
+#16 16.16 npm warn deprecated uuid@8.3.2: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
+#16 ...
+
+#15 [backend stage-1 4/6] RUN npm ci --omit=dev && npm cache clean --force
+#15 21.39
+#15 21.39 added 177 packages, and audited 178 packages in 21s
+#15 21.39
+#15 21.39 50 packages are looking for funding
+#15 21.39   run `npm fund` for details
+#15 21.39
+#15 21.39 found 0 vulnerabilities
+#15 21.39 npm notice
+#15 21.39 npm notice New major version of npm available! 10.9.9 -> 12.2.3
+#15 21.39 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.3
+#15 21.39 npm notice To update run: npm install -g npm@12.2.3
+#15 21.39 npm notice
+#15 21.49 npm warn using --force Recommended protections disabled.
+#15 DONE 21.9s
+
+#16 [backend build 4/8] RUN npm ci
+#16 ...
+
+#17 [frontend build 4/6] RUN npm ci
+#17 35.77
+#17 35.77 added 118 packages, and audited 119 packages in 36s
+#17 35.77
+#17 35.77 10 packages are looking for funding
+#17 35.77   run `npm fund` for details
+#17 35.77
+#17 35.77 found 0 vulnerabilities
+#17 35.77 npm notice
+#17 35.77 npm notice New major version of npm available! 10.9.9 -> 12.2.3
+#17 35.77 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.3
+#17 35.77 npm notice To update run: npm install -g npm@12.2.3
+#17 35.77 npm notice
+#17 DONE 35.8s
+
+#18 [frontend build 5/6] COPY . .
+#18 DONE 0.0s
+
+#16 [backend build 4/8] RUN npm ci
+#16 ...
+
+#19 [frontend build 6/6] RUN npm run build
+#19 0.170
+#19 0.170 > gas-monitor-dashboard@0.1.0 build
+#19 0.170 > tsc --noEmit && vite build
+#19 0.170
+#19 ...
+
+#16 [backend build 4/8] RUN npm ci
+#16 36.74
+#16 36.74 added 210 packages, and audited 211 packages in 37s
+#16 36.74
+#16 36.74 53 packages are looking for funding
+#16 36.74   run `npm fund` for details
+#16 36.75
+#16 36.75 3 moderate severity vulnerabilities
+#16 36.75
+#16 36.75 To address all issues (including breaking changes), run:
+#16 36.75   npm audit fix --force
+#16 36.75
+#16 36.75 Run `npm audit` for details.
+#16 36.75 npm notice
+#16 36.75 npm notice New major version of npm available! 10.9.9 -> 12.2.3
+#16 36.75 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.3
+#16 36.75 npm notice To update run: npm install -g npm@12.2.3
+#16 36.75 npm notice
+#16 DONE 36.8s
+
+#20 [backend build 5/8] COPY tsconfig.json ./
+#20 DONE 0.1s
+
+#21 [backend build 6/8] COPY src ./src
+#21 DONE 0.0s
+
+#22 [backend build 7/8] COPY test ./test
+#22 DONE 0.0s
+
+#23 [backend build 8/8] RUN npm run build
+#23 0.174
+#23 0.174 > gas-monitor-backend@0.1.0 build
+#23 0.174 > tsc -p tsconfig.json
+#23 0.174
+#23 ...
+
+#19 [frontend build 6/6] RUN npm run build
+#19 2.257 vite v7.3.8 building client environment for production...
+#19 2.308 transforming...
+#19 2.330 ✓ 4 modules transformed.
+#19 2.334 ✗ Build failed in 57ms
+#19 2.334 error during build:
+#19 2.334 [commonjs--resolver] Code is nested too deeply, reduce nesting or split the expression into smaller parts in /app/node_modules/socket.io-client/build/esm/index.js
+#19 2.334 file: /app/node_modules/socket.io-client/build/esm/index.js:14:19
+#19 2.334
+#19 2.334 12:     }
+#19 2.334 13:     opts = opts || {};
+#19 2.334 14:     const parsed = url(uri, opts.path || "/socket.io");
+#19 2.334                        ^
+#19 2.334 15:     const source = parsed.source;
+#19 2.334 16:     const id = parsed.id;
+#19 2.334
+#19 2.334     at getRollupError (file:///app/node_modules/rollup/dist/es/shared/parseAst.js:355:41)
+#19 2.334     at convertProgram (file:///app/node_modules/rollup/dist/es/shared/parseAst.js:1179:26)
+#19 2.334     at parseAst (file:///app/node_modules/rollup/dist/es/shared/parseAst.js:2168:87)
+#19 2.334     at tryParse (file:///app/node_modules/vite/dist/node/chunks/config.js:3776:10)
+#19 2.334     at analyzeTopLevelStatements (file:///app/node_modules/vite/dist/node/chunks/config.js:3788:14)
+#19 2.334     at Object.transformAndCheckExports (file:///app/node_modules/vite/dist/node/chunks/config.js:4902:66)
+#19 2.334     at Object.transform (file:///app/node_modules/vite/dist/node/chunks/config.js:5002:37)
+#19 2.334     at Object.handler (file:///app/node_modules/vite/dist/node/chunks/config.js:33980:13)
+#19 2.334     at file:///app/node_modules/rollup/dist/es/shared/node-entry.js:24475:40
+#19 ERROR: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
+
+#23 [backend build 8/8] RUN npm run build
+#23 CANCELED
+------
+ > [frontend build 6/6] RUN npm run build:
+2.334
+2.334     at getRollupError (file:///app/node_modules/rollup/dist/es/shared/parseAst.js:355:41)
+2.334     at convertProgram (file:///app/node_modules/rollup/dist/es/shared/parseAst.js:1179:26)
+2.334     at parseAst (file:///app/node_modules/rollup/dist/es/shared/parseAst.js:2168:87)
+2.334     at tryParse (file:///app/node_modules/vite/dist/node/chunks/config.js:3776:10)
+2.334     at analyzeTopLevelStatements (file:///app/node_modules/vite/dist/node/chunks/config.js:3788:14)
+2.334     at Object.transformAndCheckExports (file:///app/node_modules/vite/dist/node/chunks/config.js:4902:66)
+2.334     at Object.transform (file:///app/node_modules/vite/dist/node/chunks/config.js:5002:37)
+2.334     at Object.handler (file:///app/node_modules/vite/dist/node/chunks/config.js:33980:13)
+2.334     at file:///app/node_modules/rollup/dist/es/shared/node-entry.js:24475:40
+------
+Dockerfile:9
+
+--------------------
+
+   7 |     ARG VITE_APP_TOKEN=
+
+   8 |     ENV VITE_API_URL=$VITE_API_URL VITE_APP_TOKEN=$VITE_APP_TOKEN
+
+   9 | >>> RUN npm run build
+
+  10 |     FROM nginxinc/nginx-unprivileged:alpine
+
+  11 |     COPY --from=build /app/dist /usr/share/nginx/html
+
+--------------------
+
+target frontend: failed to solve: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
+
+302  /usr/local/bin/dockerd --config-file /run/config/docker/daemon.json
+
+github.com/moby/buildkit/executor/runcexecutor.exitError
+
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/executor/runcexecutor/executor.go:391
+
+github.com/moby/buildkit/executor/runcexecutor.(*runcExecutor).Run
+
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/executor/runcexecutor/executor.go:339
+
+github.com/moby/buildkit/solver/llbsolver/ops.(*ExecOp).Exec
+
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/solver/llbsolver/ops/exec.go:498
+
+github.com/moby/buildkit/solver.(*sharedOp).Exec.func2
+
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/solver/jobs.go:1181
+
+github.com/moby/buildkit/util/flightcontrol.(*call[...]).run
+
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/util/flightcontrol/flightcontrol.go:122
+
+sync.(*Once).doSlow
+
+	/usr/local/go/src/sync/once.go:78
+
+sync.(*Once).Do
+
+	/usr/local/go/src/sync/once.go:69
+
+runtime.goexit
+
+	/usr/local/go/src/runtime/asm_arm64.s:1268
+
+
+
+91576 v0.30.1-desktop.1 /Users/ThanhNguyen/.docker/cli-plugins/docker-buildx bake --file - --progress rawjson --metadata-file /var/folders/jg/ms0hk8hd4x1f_x2xg6t_37f00000gn/T/compose-build-metadataFile-9a3601a6-4647-4e71-bfce-9a985cd60fbb.json --allow fs.read=/Users/ThanhNguyen/Projects/SV/IOT/gas-leak-monitoring-system/backend --allow fs.read=/Users/ThanhNguyen/Projects/SV/IOT/gas-leak-monitoring-system/frontend
+
+google.golang.org/grpc.(*ClientConn).Invoke
+
+	google.golang.org/grpc@v1.76.0/call.go:35
+
+github.com/moby/buildkit/api/services/control.(*controlClient).Solve
+
+	github.com/moby/buildkit@v0.26.1/api/services/control/control_grpc.pb.go:88
+
+github.com/moby/buildkit/client.(*Client).solve.func2
+
+	github.com/moby/buildkit@v0.26.1/client/solve.go:303
+
+golang.org/x/sync/errgroup.(*Group).Go.func1
+
+	golang.org/x/sync@v0.17.0/errgroup/errgroup.go:93
+
+runtime.goexit
+
+	runtime/asm_arm64.s:1268
+
+
+
+91576 v0.30.1-desktop.1 /Users/ThanhNguyen/.docker/cli-plugins/docker-buildx bake --file - --progress rawjson --metadata-file /var/folders/jg/ms0hk8hd4x1f_x2xg6t_37f00000gn/T/compose-build-metadataFile-9a3601a6-4647-4e71-bfce-9a985cd60fbb.json --allow fs.read=/Users/ThanhNguyen/Projects/SV/IOT/gas-leak-monitoring-system/backend --allow fs.read=/Users/ThanhNguyen/Projects/SV/IOT/gas-leak-monitoring-system/frontend
+
+github.com/docker/buildx/build.BuildWithResultHandler.func1.5.2
+
+	github.com/docker/buildx/build/build.go:642
+
+github.com/docker/buildx/build.BuildWithResultHandler.func1.5
+
+	github.com/docker/buildx/build/build.go:648
+
+golang.org/x/sync/errgroup.(*Group).Go.func1
+
+	golang.org/x/sync@v0.17.0/errgroup/errgroup.go:93
+
+
+
+302  /usr/local/bin/dockerd --config-file /run/config/docker/daemon.json
+
+github.com/moby/buildkit/solver.(*edge).execOp
+
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/solver/edge.go:963
+
+github.com/moby/buildkit/solver/internal/pipe.NewWithFunction[...].func2
+
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/solver/internal/pipe/pipe.go:78
+
+runtime.goexit
+
+	/usr/local/go/src/runtime/asm_arm64.s:1268
+
+
+
+91576 v0.30.1-desktop.1 /Users/ThanhNguyen/.docker/cli-plugins/docker-buildx bake --file - --progress rawjson --metadata-file /var/folders/jg/ms0hk8hd4x1f_x2xg6t_37f00000gn/T/compose-build-metadataFile-9a3601a6-4647-4e71-bfce-9a985cd60fbb.json --allow fs.read=/Users/ThanhNguyen/Projects/SV/IOT/gas-leak-monitoring-system/backend --allow fs.read=/Users/ThanhNguyen/Projects/SV/IOT/gas-leak-monitoring-system/frontend
+
+github.com/moby/buildkit/client.(*Client).solve.func2
+
+	github.com/moby/buildkit@v0.26.1/client/solve.go:305
+
+golang.org/x/sync/errgroup.(*Group).Go.func1
+
+	golang.org/x/sync@v0.17.0/errgroup/errgroup.go:93
+
+
+
+302  /usr/local/bin/dockerd --config-file /run/config/docker/daemon.json
+
+github.com/moby/buildkit/solver/llbsolver/ops.(*ExecOp).Exec
+
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/solver/llbsolver/ops/exec.go:519
+
+github.com/moby/buildkit/solver.(*sharedOp).Exec.func2
+
+	/root/build-deb/engine/vendor/github.com/moby/buildkit/solver/jobs.go:1181
+
+
+
+Traceback (most recent call last):
+  File "/Users/ThanhNguyen/Projects/SV/IOT/gas-leak-monitoring-system/tests/compose-smoke.py", line 26, in <module>
+    run(compose+['build'],timeout=180)
+  File "/Users/ThanhNguyen/Projects/SV/IOT/gas-leak-monitoring-system/tests/compose-smoke.py", line 21, in run
+    def run(command,timeout=120,**kwargs):return subprocess.run(command,env=env,check=True,timeout=timeout,**kwargs)
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.13/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['docker', 'compose', '--project-directory', '/Users/ThanhNguyen/Projects/SV/IOT/gas-leak-monitoring-system/infrastructure', '--env-file', '/var/folders/jg/ms0hk8hd4x1f_x2xg6t_37f00000gn/T/gas-compose-gpczqsxe/test.env', '-p', 'gas-qa-e01967cc', 'build']' returned non-zero exit status 1.

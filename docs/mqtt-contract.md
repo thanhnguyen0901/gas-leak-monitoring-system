@@ -2,7 +2,7 @@
 
 Topics use `gas-monitor/device/{deviceId}/telemetry`, `/alert`, `/status` and `/ack`. Device IDs contain 1–64 ASCII letters/digits/underscore/hyphen. Configure cloud brokers using TLS/8883, credentials and CA validation. The anonymous plaintext broker is isolated localhost development only.
 
-Payload: version=1, deviceId, 16-hex bootId, unsigned sequence/uptimeMs, rawAdc (0–4095), state/previousState, fanOn, simulated. Optional diagnostics: droppedAlerts, pendingAlerts (0–48), alertJournalHealthy. Receipt time is assigned by backend; device uptime is not a gas concentration or wall-clock timestamp.
+Payload: version=1, deviceId, 16-hex bootId, unsigned sequence/uptimeMs, rawAdc (0–4095), state/previousState, fanOn, simulated. Optional quality: sensorStatus/previousSensorStatus (OK, WARMING_UP, VERIFYING_SIGNAL, LOW_RAIL, HIGH_RAIL). Quality-only changes are alerts and non-OK quality requires DANGER/fan-on fail-safe output consistency. Optional transport diagnostics: droppedAlerts, pendingAlerts (0–48), alertJournalHealthy. Receipt time is assigned by backend; device uptime is not a gas concentration or wall-clock timestamp.
 
 Telemetry remains QoS0 every 2s, not retained; obsolete samples are overwritten. It is not a durable sampling log. Alerts represent transitions and have identity deviceId+bootId+sequence. SAFE after unsafe is recovery. `/status` is retained `{"online":true}` with offline Last Will at QoS1; stale telemetry independently expires online status.
 

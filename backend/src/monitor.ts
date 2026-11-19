@@ -1,6 +1,6 @@
-import { Injectable, OnModuleInit, OnModuleDestroy, Logger } from '@nestjs/common';
+import { Injectable, Inject, OnModuleInit, OnModuleDestroy, Logger } from '@nestjs/common';
 import { connect, MqttClient } from 'mqtt';
-import { Alert, Device, Reading, parseReading } from './contracts';
+import { Alert, Device, Reading, parseReading, parseStatus, IngestionValidationError } from './contracts';
 import { MonitorGateway } from './gateway';
 import { StorageService } from './storage';
 import { TelegramService } from './telegram';
@@ -17,11 +17,13 @@ export class MonitorService implements OnModuleInit, OnModuleDestroy {
   private timer?: NodeJS.Timeout;
   private pending = Promise.resolve();
   private queued = 0;
+  private stopping=false;
   private logger = new Logger('Monitor');
   mqttConnected = false;
   invalidMessages = 0;
+  processingErrors=0;
   droppedMessages = 0;
-  constructor(private readonly gateway: MonitorGateway, private readonly storage: StorageService, private readonly telegram: TelegramService) {}
+  constructor(@Inject(MonitorGateway) private readonly gateway: MonitorGateway, @Inject(StorageService) private readonly storage: StorageService, @Inject(TelegramService) private readonly telegram: TelegramService) {}
   async onModuleInit() {
     await this.storage.ready();
     for (const d of await this.storage.loadDevices()) this.devices.set(d.id, { id:d.id, latest:d.latest, lastSeen:new Date(d.last_seen).toISOString(), online:false });
@@ -43,15 +45,18 @@ export class MonitorService implements OnModuleInit, OnModuleDestroy {
     this.client.on('error', () => { this.logger.warn('MQTT connection error; retrying'); });
     this.client.on('message', (topic, payload, packet) => {
       // Ignore retained readings/events to avoid replayed notifications. Status is intentionally retained.
+      if(this.stopping)return;
       if (topic.endsWith('/ack') || (packet.retain && !topic.endsWith('/status'))) return;
       if (this.queued >= 1000) { this.droppedMessages++; return; }
       this.queued++;
-      this.pending = this.pending.then(() => this.ingest(topic, payload)).catch(() => {
-        this.invalidMessages++; this.logger.warn('Message processing failed');
+      this.pending = this.pending.then(() => this.stopping?undefined:this.ingest(topic, payload)).catch(error => {
+        if(error instanceof IngestionValidationError)this.invalidMessages++;else this.processingErrors++;
+        this.logger.warn('Message rejected or processing unavailable');
       }).finally(() => { this.queued--; });
     });
   }
   async onModuleDestroy() {
+    this.stopping=true;
     if (this.timer) clearInterval(this.timer);
     await this.client?.endAsync(true);
     await this.pending;
@@ -59,11 +64,9 @@ export class MonitorService implements OnModuleInit, OnModuleDestroy {
   async ingest(topic: string, payload: Buffer) {
     const status = /^gas-monitor\/device\/([A-Za-z0-9_-]{1,64})\/status$/.exec(topic);
     if (status) {
-      if (payload.length > 128) throw new Error('Status too large');
-      const value = JSON.parse(payload.toString());
-      if (typeof value.online !== 'boolean') throw new Error('Invalid status');
+      const online=parseStatus(payload);
       const existing = this.devices.get(status[1]);
-      if (existing) existing.online = value.online;
+      if (existing) existing.online = online;
       this.gateway.emit('devices', this.getDevices()); return;
     }
     const { kind, value } = parseReading(topic, payload);
@@ -113,6 +116,6 @@ export class MonitorService implements OnModuleInit, OnModuleDestroy {
     let notifications:unknown={enabled:this.telegram.enabled,durable:Boolean(this.storage.pool),unavailable:true};
     if(storageAvailable)notifications=await this.telegram.stats();
     return {status:storageAvailable?'ok':'degraded',storageAvailable,notifications,storage:this.storage.pool?'postgresql':'memory',
-      mqttConnected:this.mqttConnected,invalidMessages:this.invalidMessages,droppedMessages:this.droppedMessages};
+      mqttConnected:this.mqttConnected,ingestionQueued:this.queued,processingErrors:this.processingErrors,invalidMessages:this.invalidMessages,droppedMessages:this.droppedMessages};
   }
 }

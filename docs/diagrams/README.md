@@ -1,3 +1,3 @@
 # Project diagrams
 
-Store version-controlled architecture, circuit, data-flow, and sequence diagram sources and useful exports as the relevant phases are implemented.
+The current architecture/data path is documented in [architecture.md](../architecture.md). Version-controlled circuit wiring is [diagram.json](../../firmware/wokwi/diagram.json). Add reviewed physical wiring diagrams and measured setup evidence before final submission; the Wokwi relay load is a logical LED indicator, not a motor electrical model.

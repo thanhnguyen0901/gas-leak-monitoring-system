@@ -1,4 +1,4 @@
-import { CanActivate, Controller, ExecutionContext, Get, Injectable, Module, Param, Query, UnauthorizedException, UseGuards, BadRequestException } from '@nestjs/common';
+import { CanActivate, Controller, ExecutionContext, Get, Injectable, Inject, Module, Param, Query, UnauthorizedException, UseGuards, BadRequestException } from '@nestjs/common';
 import { TelegramService } from './telegram';
 import { StorageService } from './storage';
 import { MonitorService } from './monitor';
@@ -23,7 +23,7 @@ class ReadGuard implements CanActivate {
 @Controller('api')
 @UseGuards(ReadGuard)
 class ApiController {
-  constructor(private readonly monitor: MonitorService) {}
+  constructor(@Inject(MonitorService) private readonly monitor: MonitorService) {}
   @Get('health') health() { return this.monitor.health(); }
   @Get('devices') devices() { return this.monitor.getDevices(); }
   @Get('devices/:id/readings') readings(@Param('id') id: string, @Query('limit') limit?: string) { return this.monitor.getReadings(idOf(id), limitOf(limit)); }

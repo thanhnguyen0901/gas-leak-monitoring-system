@@ -18,3 +18,5 @@ Build with scripts/build-firmware.sh, then upload the compiled sketch through Ar
 GPIO34 is input-only and has no internal pull resistor suitable for detecting an unplugged sensor; an open/floating signal is not reliably detected by this software. Review external bias and fault monitoring before physical acceptance. Relay reset/brownout behavior also needs appropriate external bias and measurement.
 
 References: [ESP32 datasheet](https://documentation.espressif.com/esp32_datasheet_en.html), [Winsen MQ-2 manual](https://www.winsen-sensor.com/d/files/manual/mq-2.pdf). Use the datasheet of the exact selected sensor/module, not an assumed warm-up duration.
+
+Physical builds also require a positive explicitly reviewed SENSOR_WARMUP_MS. SENSOR_DIAGNOSTICS_ENABLED defaults on for physical mode; configure and review the rail bounds/duration/recovery count using sensor-health.md. Test warm-up and rail fail-safe outputs on a bench before interpreting gas state. NVS transition persistence/ACK retry is implemented; actual power-cut recovery, flash wear/storage-full behavior and reset electrical outputs still require physical evidence.

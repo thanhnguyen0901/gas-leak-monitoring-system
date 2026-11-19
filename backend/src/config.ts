@@ -5,5 +5,6 @@ export function validateEnvironment() {
   }
   for(const key of ['DATABASE_SSL','MIGRATE_ON_START','NOTIFICATIONS_ENABLED'])
     if(process.env[key]!==undefined&&!['true','false'].includes(process.env[key]!))throw new Error(`Invalid ${key}`);
+  if(process.env.DATABASE_URL&&!/^postgres(?:ql)?:\/\//.test(process.env.DATABASE_URL))throw new Error('Invalid DATABASE_URL');
   if(process.env.MQTT_URL&&!/^mqtts?:\/\//.test(process.env.MQTT_URL))throw new Error('Invalid MQTT_URL');
 }

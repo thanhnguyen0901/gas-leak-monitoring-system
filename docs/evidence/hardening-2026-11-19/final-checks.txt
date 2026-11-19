@@ -1,0 +1,8 @@
+Local Markdown targets: 37 verified.
+Historical audit prefix preserved.
+H1-H4 implementation/automated tasks complete; manual acceptance still unchecked.
+Wokwi export matches canonical sketch/headers and excludes config.local.h.
+Credential-pattern scan: no real bot-token/private-key/AWS-access-key patterns found in project text.
+Local env/config/compiled outputs remain ignored.
+Default sensor diagnostics are off for simulation; positive reviewed warm-up required for physical mode.
+Source SHA-256 (sketch): fae7649c0c10f208490d9f56cfd08a4a2174761cffc666af792f24e3fb0c1643

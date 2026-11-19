@@ -6,4 +6,4 @@ PostgreSQL 16 is the planned persistent store. Apply versioned SQL migrations wi
 
 ## Integrated development stack
 
-Run `python3 scripts/configure-local.py` then `docker compose --project-directory infrastructure up --build -d` from repository root. Open http://localhost:8080. `down` preserves the project data volume; the isolated test runner uses separate throwaway containers. Build/startup of the Compose images remains unverified after registry metadata retrieval stalled in this session. Native builds and tests passed independently. See docs/integration.md and docs/final-acceptance.md.
+Run `python3 scripts/configure-local.py` then `docker compose --project-directory infrastructure up --build -d` from repository root. Open http://localhost:8080. `down` preserves the project data volume; the isolated test runner uses separate throwaway containers. Full isolated image build/startup, real PostgreSQL/broker/backend, synthetic MQTT persistence and dashboard HTTP checks passed on 2026-11-19. The frontend builder uses Debian after the Alpine native bundler failed. See docs/integration.md and docs/final-acceptance.md.

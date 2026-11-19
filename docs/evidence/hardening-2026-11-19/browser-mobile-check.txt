@@ -1,0 +1,8 @@
+{
+  "width": 390,
+  "documentWidth": 375,
+  "overflow": false,
+  "tableScrollsWithinPanel": true,
+  "health": "Lưu trữBộ nhớ tạmKênh IoTBroker đã kết nốiTelegramChưa bật",
+  "delivery": "Hàng đợi thiết bị: 5 chờ ACKSự kiện vượt dung lượng: 2Lưu bền thiết bị: Cần kiểm tra"
+}

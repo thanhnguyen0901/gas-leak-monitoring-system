@@ -18,5 +18,6 @@ if [[ "${RUN_DOCKER_TESTS:-0}" == 1 ]]; then
   python3 tests/run-postgres.py --suite system
   python3 tests/run-postgres.py --suite failure
 fi
+if [[ "${RUN_COMPOSE_TESTS:-0}" == 1 ]]; then python3 tests/compose-smoke.py; fi
 if [[ "${RUN_FIRMWARE_BUILD:-0}" == 1 ]]; then scripts/build-firmware.sh; fi
 echo "Selected automated checks completed. Wokwi/live services/physical acceptance remain manual."

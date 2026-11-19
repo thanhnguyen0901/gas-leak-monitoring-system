@@ -6,7 +6,7 @@ services:
       POSTGRES_DB: gas_monitor
       POSTGRES_USER: gas_monitor
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run scripts/configure-local.py first}
-    ports: ["127.0.0.1:5432:5432"]
+    ports: ["127.0.0.1:${POSTGRES_PORT:-5432}:5432"]
     volumes: ["postgres_data:/var/lib/postgresql/data"]
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U gas_monitor -d gas_monitor"]
@@ -15,11 +15,11 @@ services:
       retries: 20
   broker:
     image: eclipse-mosquitto:2
-    ports: ["127.0.0.1:1883:1883"]
+    ports: ["127.0.0.1:${BROKER_PORT:-1883}:1883"]
     volumes: ["./mosquitto.conf:/mosquitto/config/mosquitto.conf:ro"]
   backend:
     build: ../backend
-    ports: ["127.0.0.1:3000:3000"]
+    ports: ["127.0.0.1:${BACKEND_PORT:-3000}:3000"]
     depends_on:
       db: {condition: service_healthy}
       broker: {condition: service_started}
@@ -30,7 +30,7 @@ services:
       MQTT_URL: ${MQTT_URL:-mqtt://broker:1883}
       MQTT_USER: ${MQTT_USER:-}
       MQTT_PASSWORD: ${MQTT_PASSWORD:-}
-      WEB_ORIGIN: http://localhost:8080
+      WEB_ORIGIN: ${WEB_ORIGIN:-http://localhost:8080}
       APP_TOKEN: ${APP_TOKEN:-}
       NOTIFICATIONS_ENABLED: ${NOTIFICATIONS_ENABLED:-false}
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
@@ -39,8 +39,9 @@ services:
     build:
       context: ../frontend
       args:
-        VITE_API_URL: http://localhost:3000
-    ports: ["127.0.0.1:8080:8080"]
+        VITE_API_URL: ${PUBLIC_API_URL:-http://localhost:3000}
+        VITE_APP_TOKEN: ${APP_TOKEN:-}
+    ports: ["127.0.0.1:${FRONTEND_PORT:-8080}:8080"]
     depends_on: [backend]
 volumes:
   postgres_data:

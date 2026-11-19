@@ -10,8 +10,10 @@ test('quality-only transitions are stored/notified and never described as confir
  const warm={version:1,deviceId:'quality-test',bootId:'0123456789abcdef',sequence:1,uptimeMs:0,rawAdc:1000,state:'DANGER',previousState:'SAFE',fanOn:true,simulated:true,sensorStatus:'WARMING_UP',previousSensorStatus:'OK'};
  try{
   await monitor.ingest('gas-monitor/device/quality-test/alert',Buffer.from(JSON.stringify(warm)));await telegram.tick();assert.match(messages[0],/^SENSOR WARMING_UP/);
-  const ready={...warm,sequence:2,rawAdc:3000,previousState:'DANGER',sensorStatus:'OK',previousSensorStatus:'WARMING_UP'};
-  await monitor.ingest('gas-monitor/device/quality-test/alert',Buffer.from(JSON.stringify(ready)));await telegram.tick();assert.match(messages[1],/^DANGER/);
-  assert.equal((await monitor.getAlerts('quality-test',10)).length,2);
+  const verifying={...warm,sequence:2,previousState:'DANGER',sensorStatus:'VERIFYING_SIGNAL',previousSensorStatus:'WARMING_UP'};
+  await monitor.ingest('gas-monitor/device/quality-test/alert',Buffer.from(JSON.stringify(verifying)));await telegram.tick();assert.match(messages[1],/^SENSOR VERIFYING_SIGNAL/);
+  const ready={...warm,sequence:3,rawAdc:3000,previousState:'DANGER',sensorStatus:'OK',previousSensorStatus:'VERIFYING_SIGNAL'};
+  await monitor.ingest('gas-monitor/device/quality-test/alert',Buffer.from(JSON.stringify(ready)));await telegram.tick();assert.match(messages[2],/^DANGER/);
+  assert.equal((await monitor.getAlerts('quality-test',10)).length,3);
  }finally{await app.close();}
 });

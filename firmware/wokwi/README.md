@@ -30,3 +30,5 @@ Simulation-only entry thresholds are WARNING >=1400 and DANGER >=2800. Recovery 
 ESP32 builds, portable logic tests and software broker/database/API/dashboard tests have been run. Wokwi execution itself, physical motor behavior and live Telegram have not been verified. Historical Phase 1 evidence records the earlier minimal circuit; do not treat it as current integrated runtime evidence.
 
 References: [potentiometer](https://docs.wokwi.com/parts/wokwi-potentiometer), [diagram format](https://docs.wokwi.com/diagram-format), [relay](https://docs.wokwi.com/parts/wokwi-relay-module), [local configuration](https://docs.wokwi.com/vscode/project-config).
+
+The sketch targets Arduino-ESP32 core 3.3.12. Browser source compilation has not been verified against its selected core version. For a toolchain-matched simulation, use the locally compiled merged image/ELF with the extension, or follow the official [custom application firmware workflow](https://docs.wokwi.com/guides/esp32#custom-application-firmware). Treat any configured binary as private because it can contain local connection credentials; never publish it.

@@ -6,7 +6,7 @@ User requested a single final manual acceptance round after sequential implement
 
 - [ ] Run `npm ci` in backend and frontend; install Arduino libraries listed in firmware/wokwi/libraries.txt.
 - [ ] Run `scripts/verify.sh` (set RUN_DOCKER_TESTS=1 and RUN_FIRMWARE_BUILD=1 for applicable checks).
-- [ ] Build/start the local stack using docs/integration.md. Docker image build/startup remains unverified in this environment because base-image metadata retrieval stalled.
+- [ ] Build/start the local stack using docs/integration.md. Isolated Docker build/startup/MQTT/DB/HTTP checks passed on 2026-11-19; confirm your own local configuration.
 - [ ] Configure the same reachable MQTT broker in backend and firmware privately. For cloud use TLS and CA; do not publish config.local.h or credentials in a public Wokwi project.
 - [ ] Configure a real Telegram bot/chat server-side and explicitly enable notifications.
 
@@ -40,3 +40,16 @@ User requested a single final manual acceptance round after sequential implement
 - [ ] Validate sensor → ESP32 → MQTT → backend → PostgreSQL → web → real Telegram on calibrated hardware.
 - [ ] Verify database history survives backend restart, alert IDs remain deduplicated and the UI never presents stale data as current online status.
 - [ ] Record observed results, defects and limitations; update final report with real screenshots/measurements and complete only verified phase criteria.
+
+## Consolidated hardening checks — same final acceptance session
+
+- [ ] Use the latest config.example.h as the basis of local config; older private headers may need the new warm-up/diagnostic fields. Apply migrations including 002_notifications before enabling durable notifications.
+- [ ] Confirm service-health panels identify PostgreSQL versus memory mode, broker connection and queued/failed notifications. Stop the backend and confirm cached health/data is labeled unknown/offline.
+- [ ] For a simulated diagnostic profile only, enable rail diagnostics and choose a clearly simulated warm-up (e.g. 3000ms). Observe WARMING_UP and conservative outputs; rail entry must immediately show VERIFYING_SIGNAL without an intermediate SAFE, then hold each rail longer than the fault duration and require the configured consecutive-good recovery samples. Do not reuse simulation timing as a physical datasheet value.
+- [ ] Confirm sensor-quality changes generate alerts even if gas state remains DANGER, and later trusted gas danger is explicitly notified. A floating intermediate ADC is not reliably diagnosed; check the actual bias/fault circuit separately.
+- [ ] Trigger an unsafe notification, restart the backend, then return to SAFE. Verify durable cooldown/incident state and recovery. Also verify recovery after unsafe delivery retries fail; inspect failed jobs in health/history.
+- [ ] Stop the DB, trigger an alert, and observe pending firmware events remain without application ACK. Restore DB and verify one stored event/outbox job despite retries and a subsequent ACK clearing the journal.
+- [ ] With events confirmed journaled and broker unavailable, reboot the ESP32 and restore services. Verify old-boot event identities are preserved, stored once and acknowledged. Confirm ordinary samples remain current rather than old telemetry being replayed.
+- [ ] Review finite 32 NVS + 16 RAM capacity, overflow counters, NVS failure indication, the volatile ingress window and the external Telegram send/SQL-commit duplicate window. Physical power-cut/flash-full tests require controlled bench conditions and real evidence.
+
+Automated host/container tests already exercise logic, SQL persistence, duplicate ACKs, restart and outage paths. These remaining checks validate your exact Wokwi/cloud/board/sensor/electrical setup; they are not marked PASS in advance.

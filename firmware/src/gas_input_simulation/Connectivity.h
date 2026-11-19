@@ -54,7 +54,8 @@ inline void connectivityTask(void*) {
   snprintf(alertTopic,sizeof(alertTopic),"%s/alert",prefix);
   snprintf(statusTopic,sizeof(statusTopic),"%s/status",prefix);
   snprintf(ackTopic,sizeof(ackTopic),"%s/ack",prefix);
-  bool ackReceived=false,awaitingAck=false,clockStarted=false;
+  bool ackReceived=false,awaitingAck=false,clockStarted=false,ackStoreFailed=false;
+  uint32_t lastAckStoreAttempt=millis()-1000;
   mqtt.setCallback([&](char* topic,uint8_t* payload,unsigned int length){
     if(awaitingAck&&strcmp(topic,ackTopic)==0&&length==strlen(expectedAck)&&memcmp(payload,expectedAck,length)==0)ackReceived=true;
   });
@@ -102,9 +103,11 @@ inline void connectivityTask(void*) {
         }
       }
       mqtt.loop();mqttOnline.store(mqtt.connected());
-      if(ackReceived) {
+      if(ackReceived&&(!ackStoreFailed||uint32_t(now-lastAckStoreAttempt)>=1000)) {
+        lastAckStoreAttempt=now;
         AlertJournal candidate=journal;
-        if(candidate.pop()&&persist(candidate)){journal=candidate;awaitingAck=false;ackReceived=false;lastAlert=now-3000;}
+        if(candidate.pop()&&persist(candidate)){journal=candidate;awaitingAck=false;ackReceived=false;ackStoreFailed=false;lastAlert=now-3000;}
+        else ackStoreFailed=true;
       }
       if(mqtt.connected()) {
         Snapshot latest;

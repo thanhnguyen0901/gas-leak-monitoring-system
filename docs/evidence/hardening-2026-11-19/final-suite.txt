@@ -1,0 +1,124 @@
+Journal restart/order/ACK removal/capacity/corruption/schema validation passed
+LED mapping and buzzer cadence passed over 10 seconds
+Warm-up, rail persistence, debounced recovery, timer wrap and simulation bypass passed
+State boundaries, hysteresis, jumps, invalid input and all 4096 rising inputs passed
+Simulation allowed; unconfirmed physical/warm-up profile rejected; explicitly confirmed profile accepted. No real calibration is implied.
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.002s
+
+OK
+
+> gas-monitor-backend@0.1.0 test
+> npm run build && node --test dist/test/*.test.js
+
+
+> gas-monitor-backend@0.1.0 build
+> tsc -p tsconfig.json
+
+✔ configured read token protects REST and rejects unauthorized Socket.IO clients (132.31775ms)
+✔ reject invalid numeric and boolean runtime configuration (0.577333ms)
+✔ database TLS verification cannot be weakened by URL sslmode; migration/runtime share options (0.675375ms)
+✔ reject malformed, mismatched and out-of-range MQTT data (2.640625ms)
+✔ MQTT to NestJS REST/WebSocket; alert deduplication and stale device status (421.203459ms)
+✔ quality-only transitions are stored/notified and never described as confirmed gas concentration (106.496667ms)
+✔ warning, danger escalation, recovery, duplicate pending events and cooldown (0.748ms)
+✔ delivery errors retry without blocking ingestion; rate-limit retry_after respected (0.166ms)
+✔ bounded queue and failed delivery limit (0.250667ms)
+✔ new danger after delivered recovery bypasses the previous incident cooldown (0.12225ms)
+✔ quality-only change sends sensor reason and later trusted gas danger despite cooldown (0.165459ms)
+✔ recovery is delivered even if all unsafe notification attempts failed (0.173375ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5572.893917
+
+> gas-monitor-dashboard@0.1.0 test
+> node --import tsx --test test/*.test.ts
+
+✔ history merges concurrent HTTP/socket data without duplicates; preserves reboot identity and time order (0.761375ms)
+✔ alerts deduplicate; disconnected backend never reports current online status (0.103333ms)
+✔ sensor readiness is explicit and legacy readings remain compatible (0.063708ms)
+✔ service failures and memory mode stay visible; stale health never appears healthy (0.130458ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 138.447125
+
+> gas-monitor-dashboard@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v7.3.8 building client environment for production...
+transforming...
+✓ 471 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                         0.71 kB │ gzip:   0.47 kB
+dist/assets/index-5CxERDTQ.css          7.43 kB │ gzip:   2.32 kB
+dist/assets/index-DdRnW-f4.js         277.76 kB │ gzip:  87.09 kB
+dist/assets/HistoryChart-CSgTiM-T.js  421.73 kB │ gzip: 121.08 kB
+✓ built in 1.36s
+
+> gas-monitor-backend@0.1.0 test:db
+> npm run build && node --test dist/test/postgres.integration.js
+
+
+> gas-monitor-backend@0.1.0 build
+> tsc -p tsconfig.json
+
+✔ real PostgreSQL migration, idempotence, constraints, history and restart (132.5145ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 480.431708
+
+> gas-monitor-backend@0.1.0 test:system
+> npm run build && node --test --test-concurrency=1 dist/test/system.integration.js dist/test/notifications.integration.js
+
+
+> gas-monitor-backend@0.1.0 build
+> tsc -p tsconfig.json
+
+✔ transactional outbox survives restart; cooldown and recovery persist; duplicate alert creates one job (110.960917ms)
+✔ persisted retry_after survives worker recreation and concurrent workers claim once (27.602583ms)
+✔ failed unsafe delivery still preserves recovery eligibility across restart (52.772667ms)
+✔ synthetic device → MQTT → NestJS → PostgreSQL → REST/WebSocket → mock Telegram (1693.940833ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2403.957416
+
+> gas-monitor-backend@0.1.0 test:failure
+> npm run build && node --test dist/test/failure.integration.js
+
+
+> gas-monitor-backend@0.1.0 build
+> tsc -p tsconfig.json
+
+[Nest] 94846  - 11/19/2026, 11:38:25 AM    WARN [Monitor] Message rejected or processing unavailable
+✔ broker unavailable/reconnect, stale telemetry, retired boot and database outage/recovery (10561.845959ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10799.481792
+Selected automated checks completed. Wokwi/live services/physical acceptance remain manual.

@@ -1,0 +1,7 @@
+{
+  "connection": "Mất kết nối máy chủ",
+  "health": "Lưu trữChưa xác nhậnKênh IoTChưa xác nhậnTelegramChưa xác nhận",
+  "delivery": "Thống kê thiết bị ghi nhận cuối: 5 chờ ACKSự kiện vượt dung lượng: 2Lưu bền thiết bị: Cần kiểm tra",
+  "deviceState": "TRẠNG THÁINgoại tuyếnGhi nhận cuối: WARNING○ CHƯA CÓ TÍN HIỆU MỚI",
+  "overflow": false
+}

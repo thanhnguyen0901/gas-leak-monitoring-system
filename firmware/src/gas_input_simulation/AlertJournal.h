@@ -26,7 +26,8 @@ class AlertJournal {
     return hash;
   }
   static bool validEvent(const AlertEnvelope& event) {
-    if(event.sample.raw<0||event.sample.raw>4095||unsigned(event.sample.state)>2||unsigned(event.sample.previous)>2||unsigned(event.sample.sensorStatus)>3||unsigned(event.sample.previousSensorStatus)>3)return false;
+    if(event.sample.raw<0||event.sample.raw>4095||unsigned(event.sample.state)>2||unsigned(event.sample.previous)>2||unsigned(event.sample.sensorStatus)>4||unsigned(event.sample.previousSensorStatus)>4)return false;
+    if((event.sample.sensorStatus!=SensorStatus::OK&&event.sample.state!=GasState::DANGER)||(event.sample.previousSensorStatus!=SensorStatus::OK&&event.sample.previous!=GasState::DANGER))return false;
     if(event.sample.fan!=(event.sample.state!=GasState::SAFE)||event.boot[16]!='\0')return false;
     for(size_t i=0;i<16;i++)if(!((event.boot[i]>='0'&&event.boot[i]<='9')||(event.boot[i]>='a'&&event.boot[i]<='f')))return false;
     return true;

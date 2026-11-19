@@ -37,3 +37,9 @@ test('quality-only change sends sensor reason and later trusted gas danger despi
  q.enqueue(fault);await q.tick(0);assert.match(sent[0],/^SENSOR WARMING_UP/);
  q.enqueue({...make('2','DANGER'),previousState:'DANGER',sensorStatus:'OK',previousSensorStatus:'WARMING_UP'});await q.tick(1);assert.match(sent[1],/^DANGER/);
 });
+
+test('recovery is delivered even if all unsafe notification attempts failed',async()=>{
+ const sent:string[]=[];const q=new NotificationQueue(async text=>{if(text.startsWith('DANGER'))throw new Error('offline');sent.push(text);});
+ q.enqueue(make('1','DANGER'));for(const t of [0,2000,6000,14000,30000])await q.tick(t);
+ assert.equal(q.dropped,1);q.enqueue(make('2','SAFE'));await q.tick(30001);assert.match(sent[0],/^RECOVERY/);
+});

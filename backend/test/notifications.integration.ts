@@ -33,3 +33,14 @@ test('persisted retry_after survives worker recreation and concurrent workers cl
   assert.equal(attempts,2);
  }finally{await storage.close();}
 });
+
+test('failed unsafe delivery still preserves recovery eligibility across restart',async()=>{
+ let storage=new StorageService();await storage.ready();const now=Date.now()+1000;const sent:string[]=[];
+ try{
+  await storage.saveAlert(make('failure-recovery',1,'DANGER'),true);
+  for(const elapsed of [0,2000,6000,14000,30000])await storage.processNotification(async()=>{throw new Error('simulated network failure');},60000,now+elapsed);
+  await storage.close();storage=new StorageService();await storage.ready();
+  await storage.saveAlert(make('failure-recovery',2,'SAFE'),true);
+  await storage.processNotification(async text=>{sent.push(text);},60000,now+30001);assert.match(sent[0],/^RECOVERY/);
+ }finally{await storage.close();}
+});

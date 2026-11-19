@@ -4,7 +4,7 @@ import { readdir, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { Alert, Reading } from './contracts';
 import { databaseOptions } from './database';
-import { emptyPolicy, shouldNotify, deliveredPolicy, notificationText, retryDelay } from './notification-policy';
+import { emptyPolicy, shouldNotify, deliveredPolicy, notificationText, observedPolicy, retryDelay } from './notification-policy';
 import { createHash } from 'node:crypto';
 export async function migrate(pool: Pool) {
   const client = await pool.connect();
@@ -98,15 +98,17 @@ export class StorageService implements OnApplicationShutdown {
       await c.query('INSERT INTO notification_state(device_id) VALUES ($1) ON CONFLICT DO NOTHING',[alert.deviceId]);
       const state=(await c.query('SELECT policy FROM notification_state WHERE device_id=$1 FOR UPDATE',[alert.deviceId])).rows[0].policy??emptyPolicy();
       if(!shouldNotify(alert,state,now,cooldown)) {
+        await c.query('UPDATE notification_state SET policy=$2,updated_at=$3 WHERE device_id=$1',[alert.deviceId,observedPolicy(alert,state,true),new Date(now)]);
         await c.query("UPDATE notification_outbox SET status='suppressed',finished_at=$2 WHERE ordinal=$1",[job.ordinal,new Date(now)]);
       } else {
-        let deliveryError:unknown;
-        try {await send(notificationText(alert));}catch(error){deliveryError=error;}
-        if(deliveryError===undefined) {
+        let deliveryError:unknown,delivered=false;
+        try {await send(notificationText(alert));delivered=true;}catch(error){deliveryError=error;}
+        if(delivered) {
           await c.query('UPDATE notification_state SET policy=$2,updated_at=$3 WHERE device_id=$1',[alert.deviceId,deliveredPolicy(alert,state,now),new Date(now)]);
           await c.query("UPDATE notification_outbox SET status='sent',attempts=attempts+1,finished_at=$2 WHERE ordinal=$1",[job.ordinal,new Date(now)]);
         } else {
           const attempts=job.attempts+1;
+          await c.query('UPDATE notification_state SET policy=$2,updated_at=$3 WHERE device_id=$1',[alert.deviceId,observedPolicy(alert,state,attempts>=5),new Date(now)]);
           await c.query('UPDATE notification_outbox SET attempts=$2,status=$3,next_attempt_at=$4,finished_at=$5 WHERE ordinal=$1',
             [job.ordinal,attempts,attempts>=5?'failed':'pending',new Date(now+retryDelay(deliveryError,attempts)),attempts>=5?new Date(now):null]);
         }

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 export const deviceId = z.string().regex(/^[A-Za-z0-9_-]{1,64}$/);
 export const state = z.enum(['SAFE', 'WARNING', 'DANGER']);
-export const sensorStatus=z.enum(['OK','WARMING_UP','LOW_RAIL','HIGH_RAIL']);
+export const sensorStatus=z.enum(['OK','WARMING_UP','LOW_RAIL','HIGH_RAIL','VERIFYING_SIGNAL']);
 export const readingSchema = z.object({
   version: z.literal(1), deviceId, bootId: z.string().regex(/^[a-fA-F0-9]{16}$/),
   sequence: z.number().int().min(0).max(0xffffffff), uptimeMs: z.number().int().min(0).max(0xffffffff),
@@ -15,7 +15,12 @@ export const readingSchema = z.object({
 export type Reading = z.infer<typeof readingSchema> & { receivedAt: string };
 export type Alert = Reading & { id: string; recovery: boolean };
 export type Device = { id: string; latest: Reading | null; lastSeen: string; online: boolean };
+export class IngestionValidationError extends Error {constructor(){super('Invalid incoming message');}}
+export function parseStatus(data:Buffer){
+ try{if(data.length>128)throw new Error();return z.object({online:z.boolean()}).strict().parse(JSON.parse(data.toString('utf8'))).online;}catch{throw new IngestionValidationError();}
+}
 export function parseReading(topic: string, data: Buffer) {
+ try {
   const match = /^gas-monitor\/device\/([A-Za-z0-9_-]{1,64})\/(telemetry|alert)$/.exec(topic);
   if (!match || data.length > 4096) throw new Error('Invalid topic or payload size');
   const value = readingSchema.parse(JSON.parse(data.toString('utf8')));
@@ -24,4 +29,5 @@ export function parseReading(topic: string, data: Buffer) {
   if(value.sensorStatus&&value.sensorStatus!=='OK'&&value.state!=='DANGER')throw new Error('Sensor attention must use fail-safe DANGER outputs');
   if(value.previousSensorStatus&&value.previousSensorStatus!=='OK'&&value.previousState!=='DANGER')throw new Error('Invalid previous sensor state');
   return { kind: match[2], value };
+ }catch{throw new IngestionValidationError();}
 }

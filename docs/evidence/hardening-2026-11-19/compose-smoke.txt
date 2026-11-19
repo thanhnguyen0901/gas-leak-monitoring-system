@@ -1,0 +1,280 @@
+Checking public image node:22-alpine
+22-alpine: Pulling from library/node
+Digest: sha256:1314fb30ec37592d5845e5a160d522c0e680972aa534549940b8d73bde88481a
+Status: Image is up to date for node:22-alpine
+docker.io/library/node:22-alpine
+Checking public image node:22-bookworm-slim
+22-bookworm-slim: Pulling from library/node
+97752f0f4999: Pulling fs layer
+f5d21ada3c7e: Pulling fs layer
+4b9ff286f318: Pulling fs layer
+85d8253b4d52: Pulling fs layer
+2d66c782e484: Pulling fs layer
+97752f0f4999: Download complete
+f5d21ada3c7e: Download complete
+a490d0aa2bbf: Download complete
+85d8253b4d52: Download complete
+9859f830bf02: Download complete
+2d66c782e484: Download complete
+f5d21ada3c7e: Pull complete
+2d66c782e484: Pull complete
+4b9ff286f318: Download complete
+97752f0f4999: Pull complete
+85d8253b4d52: Pull complete
+4b9ff286f318: Pull complete
+Digest: sha256:e9f565d32859f0cbfb52125eafe8be39390f24dac302dc3cdf566e8ba3ab21ee
+Status: Downloaded newer image for node:22-bookworm-slim
+docker.io/library/node:22-bookworm-slim
+Checking public image nginxinc/nginx-unprivileged:alpine
+alpine: Pulling from nginxinc/nginx-unprivileged
+Digest: sha256:b5047b9b76845eac124358373c6852377c52e4b05834a47647e955dd91cb8f1e
+Status: Image is up to date for nginxinc/nginx-unprivileged:alpine
+docker.io/nginxinc/nginx-unprivileged:alpine
+Checking public image eclipse-mosquitto:2
+2: Pulling from library/eclipse-mosquitto
+Digest: sha256:fa12172a051310efe5bcb7a6a11b77bd5faacb82cbacd7742aa758bf024fd8e4
+Status: Image is up to date for eclipse-mosquitto:2
+docker.io/library/eclipse-mosquitto:2
+ Image gas-qa-2c58e355-backend Building
+ Image gas-qa-2c58e355-frontend Building
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.24kB done
+#1 DONE 0.0s
+
+#2 [backend internal] load build definition from Dockerfile
+#2 transferring dockerfile: 446B done
+#2 DONE 0.0s
+
+#3 [frontend internal] load build definition from Dockerfile
+#3 transferring dockerfile: 371B done
+#3 WARN: SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "VITE_APP_TOKEN") (line 7)
+#3 WARN: SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ENV "VITE_APP_TOKEN") (line 8)
+#3 DONE 0.0s
+
+#4 [frontend internal] load metadata for docker.io/library/node:22-bookworm-slim
+#4 DONE 0.0s
+
+#5 [frontend internal] load metadata for docker.io/nginxinc/nginx-unprivileged:alpine
+#5 DONE 0.0s
+
+#6 [backend internal] load metadata for docker.io/library/node:22-alpine
+#6 DONE 0.0s
+
+#7 [frontend internal] load .dockerignore
+#7 transferring context: 70B done
+#7 DONE 0.0s
+
+#8 [backend internal] load .dockerignore
+#8 transferring context: 70B done
+#8 DONE 0.0s
+
+#9 [frontend internal] load build context
+#9 DONE 0.0s
+
+#10 [backend build 1/8] FROM docker.io/library/node:22-alpine@sha256:1314fb30ec37592d5845e5a160d522c0e680972aa534549940b8d73bde88481a
+#10 resolve docker.io/library/node:22-alpine@sha256:1314fb30ec37592d5845e5a160d522c0e680972aa534549940b8d73bde88481a
+#10 resolve docker.io/library/node:22-alpine@sha256:1314fb30ec37592d5845e5a160d522c0e680972aa534549940b8d73bde88481a 0.0s done
+#10 DONE 0.1s
+
+#11 [backend internal] load build context
+#11 transferring context: 165.28kB done
+#11 DONE 0.1s
+
+#12 [frontend stage-1 1/2] FROM docker.io/nginxinc/nginx-unprivileged:alpine@sha256:b5047b9b76845eac124358373c6852377c52e4b05834a47647e955dd91cb8f1e
+#12 resolve docker.io/nginxinc/nginx-unprivileged:alpine@sha256:b5047b9b76845eac124358373c6852377c52e4b05834a47647e955dd91cb8f1e 0.0s done
+#12 CACHED
+
+#13 [backend build 2/8] WORKDIR /app
+#13 CACHED
+
+#9 [frontend internal] load build context
+#9 transferring context: 110.32kB done
+#9 DONE 0.0s
+
+#14 [backend build 3/8] COPY package*.json ./
+#14 DONE 0.2s
+
+#15 [frontend build 1/6] FROM docker.io/library/node:22-bookworm-slim@sha256:e9f565d32859f0cbfb52125eafe8be39390f24dac302dc3cdf566e8ba3ab21ee
+#15 resolve docker.io/library/node:22-bookworm-slim@sha256:e9f565d32859f0cbfb52125eafe8be39390f24dac302dc3cdf566e8ba3ab21ee 0.0s done
+#15 DONE 0.3s
+
+#16 [frontend build 2/6] WORKDIR /app
+#16 DONE 0.0s
+
+#17 [frontend build 3/6] COPY package*.json ./
+#17 DONE 0.0s
+
+#18 [frontend build 4/6] RUN npm ci
+#18 ...
+
+#19 [backend build 4/8] RUN npm ci
+#19 1.226 npm warn deprecated uuid@10.0.0: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
+#19 9.888 npm warn deprecated uuid@8.3.2: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
+#19 ...
+
+#20 [backend stage-1 4/6] RUN npm ci --omit=dev && npm cache clean --force
+#20 10.74
+#20 10.74 added 177 packages, and audited 178 packages in 11s
+#20 10.74
+#20 10.74 50 packages are looking for funding
+#20 10.74   run `npm fund` for details
+#20 10.74
+#20 10.74 found 0 vulnerabilities
+#20 10.74 npm notice
+#20 10.74 npm notice New major version of npm available! 10.9.9 -> 12.2.3
+#20 10.74 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.3
+#20 10.74 npm notice To update run: npm install -g npm@12.2.3
+#20 10.74 npm notice
+#20 10.83 npm warn using --force Recommended protections disabled.
+#20 DONE 11.3s
+
+#18 [frontend build 4/6] RUN npm ci
+#18 ...
+
+#19 [backend build 4/8] RUN npm ci
+#19 15.97
+#19 15.97 added 210 packages, and audited 211 packages in 16s
+#19 15.97
+#19 15.97 53 packages are looking for funding
+#19 15.97   run `npm fund` for details
+#19 15.97
+#19 15.97 3 moderate severity vulnerabilities
+#19 15.97
+#19 15.97 To address all issues (including breaking changes), run:
+#19 15.97   npm audit fix --force
+#19 15.97
+#19 15.97 Run `npm audit` for details.
+#19 15.97 npm notice
+#19 15.97 npm notice New major version of npm available! 10.9.9 -> 12.2.3
+#19 15.97 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.3
+#19 15.97 npm notice To update run: npm install -g npm@12.2.3
+#19 15.97 npm notice
+#19 DONE 16.1s
+
+#21 [backend build 5/8] COPY tsconfig.json ./
+#21 DONE 0.1s
+
+#18 [frontend build 4/6] RUN npm ci
+#18 ...
+
+#22 [backend build 6/8] COPY src ./src
+#22 DONE 0.0s
+
+#23 [backend build 7/8] COPY test ./test
+#23 DONE 0.0s
+
+#24 [backend build 8/8] RUN npm run build
+#24 0.174
+#24 0.174 > gas-monitor-backend@0.1.0 build
+#24 0.174 > tsc -p tsconfig.json
+#24 0.174
+#24 DONE 1.7s
+
+#18 [frontend build 4/6] RUN npm ci
+#18 ...
+
+#25 [backend stage-1 5/6] COPY --from=build /app/dist ./dist
+#25 DONE 0.0s
+
+#26 [backend stage-1 6/6] COPY migrations ./migrations
+#26 DONE 0.0s
+
+#27 [backend] exporting to image
+#27 exporting layers
+#27 exporting layers 0.9s done
+#27 exporting manifest sha256:bc3d129a309014f534ff92c303ae5ff7a2034978bd2dda44a2aa9c928e392902
+#27 exporting manifest sha256:bc3d129a309014f534ff92c303ae5ff7a2034978bd2dda44a2aa9c928e392902 done
+#27 exporting config sha256:1b439ba9a2b5c3ea8d6317e968cc030dea6de29fa4ac53b11946b3aa452ab7a5 done
+#27 exporting attestation manifest sha256:3fad14259b47e3ef6f38a29993a6542089307dd11a73b358abb7f4e34e8ee9b5 done
+#27 exporting manifest list sha256:ee4b3f494753baaded3324d093a58f50b261412b61c66522e8e46507d64bb779 done
+#27 naming to docker.io/library/gas-qa-2c58e355-backend:latest done
+#27 unpacking to docker.io/library/gas-qa-2c58e355-backend:latest
+#27 unpacking to docker.io/library/gas-qa-2c58e355-backend:latest 0.4s done
+#27 DONE 1.3s
+
+#28 [backend] resolving provenance for metadata file
+#28 DONE 0.0s
+
+#18 [frontend build 4/6] RUN npm ci
+#18 19.92
+#18 19.92 added 118 packages, and audited 119 packages in 20s
+#18 19.92
+#18 19.92 10 packages are looking for funding
+#18 19.92   run `npm fund` for details
+#18 19.92
+#18 19.92 found 0 vulnerabilities
+#18 19.92 npm notice
+#18 19.92 npm notice New major version of npm available! 10.9.9 -> 12.2.3
+#18 19.92 npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.3
+#18 19.92 npm notice To update run: npm install -g npm@12.2.3
+#18 19.92 npm notice
+#18 DONE 20.0s
+
+#29 [frontend build 5/6] COPY . .
+#29 DONE 0.0s
+
+#30 [frontend build 6/6] RUN npm run build
+#30 0.226
+#30 0.226 > gas-monitor-dashboard@0.1.0 build
+#30 0.226 > tsc --noEmit && vite build
+#30 0.226
+#30 2.112 vite v7.3.8 building client environment for production...
+#30 2.159 transforming...
+#30 3.859 ✓ 471 modules transformed.
+#30 4.083 rendering chunks...
+#30 4.130 computing gzip size...
+#30 4.141 dist/index.html                         0.71 kB │ gzip:   0.47 kB
+#30 4.141 dist/assets/index-5CxERDTQ.css          7.43 kB │ gzip:   2.32 kB
+#30 4.141 dist/assets/index-BVKNlFuA.js         277.71 kB │ gzip:  87.07 kB
+#30 4.141 dist/assets/HistoryChart-a795rfmy.js  421.73 kB │ gzip: 121.08 kB
+#30 4.141 ✓ built in 2.01s
+#30 DONE 4.2s
+
+#31 [frontend stage-1 2/2] COPY --from=build /app/dist /usr/share/nginx/html
+#31 DONE 0.0s
+
+#32 [frontend] exporting to image
+#32 exporting layers 0.0s done
+#32 exporting manifest sha256:27d2210058296eeb2cb7effc2853af665d88b7264e8aa8108a3a8d2c6bfb7024 done
+#32 exporting config sha256:80b341695ad4a33418ae6477295d4753537e3aed86ea5d2747ef2d7570682549 done
+#32 exporting attestation manifest sha256:bb4b2a469822d3026b18e1b9331ce58e08f256867389cd8ac119c7e7fcd4d3a3 done
+#32 exporting manifest list sha256:670b54f73fac5f98096be80aaa6da889c532763f54047cccec65c42eb2c1a3fe done
+#32 naming to docker.io/library/gas-qa-2c58e355-frontend:latest done
+#32 unpacking to docker.io/library/gas-qa-2c58e355-frontend:latest 0.0s done
+#32 DONE 0.1s
+
+#33 [frontend] resolving provenance for metadata file
+#33 DONE 0.0s
+ Image gas-qa-2c58e355-backend Built
+ Image gas-qa-2c58e355-frontend Built
+ Network gas-qa-2c58e355_default Creating
+ Network gas-qa-2c58e355_default Created
+ Volume gas-qa-2c58e355_postgres_data Creating
+ Volume gas-qa-2c58e355_postgres_data Created
+ Container gas-qa-2c58e355-db-1 Creating
+ Container gas-qa-2c58e355-broker-1 Creating
+ Container gas-qa-2c58e355-broker-1 Created
+ Container gas-qa-2c58e355-db-1 Created
+ Container gas-qa-2c58e355-backend-1 Creating
+ Container gas-qa-2c58e355-backend-1 Created
+ Container gas-qa-2c58e355-frontend-1 Creating
+ Container gas-qa-2c58e355-frontend-1 Created
+ Container gas-qa-2c58e355-broker-1 Starting
+ Container gas-qa-2c58e355-db-1 Starting
+ Container gas-qa-2c58e355-broker-1 Started
+ Container gas-qa-2c58e355-db-1 Started
+ Container gas-qa-2c58e355-db-1 Waiting
+ Container gas-qa-2c58e355-db-1 Healthy
+ Container gas-qa-2c58e355-backend-1 Starting
+ Container gas-qa-2c58e355-backend-1 Started
+ Container gas-qa-2c58e355-frontend-1 Starting
+ Container gas-qa-2c58e355-frontend-1 Started
+ Container gas-qa-2c58e355-db-1 Waiting
+ Container gas-qa-2c58e355-broker-1 Waiting
+ Container gas-qa-2c58e355-backend-1 Waiting
+ Container gas-qa-2c58e355-frontend-1 Waiting
+ Container gas-qa-2c58e355-backend-1 Healthy
+ Container gas-qa-2c58e355-broker-1 Healthy
+ Container gas-qa-2c58e355-frontend-1 Healthy
+ Container gas-qa-2c58e355-db-1 Healthy
+COMPOSE PASS: images build; PostgreSQL+broker+backend+dashboard start; synthetic MQTT event persists; frontend HTTP works. No real Telegram or hardware.

@@ -1,17 +1,20 @@
 import { Alert } from './contracts';
-export type NotificationPolicy = { active?: string; activeSensor?:string; lastSent: Record<string,number> };
+export type NotificationPolicy = { active?: string; activeSensor?:string; observedUnsafe?:boolean; lastSent: Record<string,number> };
 export const emptyPolicy = ():NotificationPolicy => ({lastSent:{}});
 const notificationKey=(a:Alert)=>a.sensorStatus&&a.sensorStatus!=='OK'?`SENSOR_${a.sensorStatus}`:a.state;
 export function shouldNotify(a:Alert,p:NotificationPolicy,now:number,cooldown:number) {
-  if(a.recovery)return Boolean(p.active);
+  if(a.recovery)return p.observedUnsafe!==false&&(Boolean(p.active)||a.previousState!=='SAFE'||(a.previousSensorStatus??'OK')!=='OK');
   const sensor=a.sensorStatus??'OK';
   if(sensor!=='OK'&&p.activeSensor!==sensor)return true;
   if(sensor==='OK'&&p.activeSensor&&p.activeSensor!=='OK')return true;
-  if(a.state==='DANGER' && p.active!=='DANGER')return true;
+  if(a.state==='DANGER' && (p.active!=='DANGER'||p.observedUnsafe===false))return true;
   return now-(p.lastSent[notificationKey(a)]??-Infinity)>=cooldown;
 }
+export function observedPolicy(a:Alert,p:NotificationPolicy,terminal:boolean):NotificationPolicy {
+  return {...p,observedUnsafe:a.recovery?(terminal?false:p.observedUnsafe):true};
+}
 export function deliveredPolicy(a:Alert,p:NotificationPolicy,now:number):NotificationPolicy {
-  return {active:a.recovery?undefined:a.state,activeSensor:a.recovery?undefined:(a.sensorStatus??'OK'),lastSent:{...p.lastSent,[notificationKey(a)]:now}};
+  return {...observedPolicy(a,p,true),active:a.recovery?undefined:a.state,activeSensor:a.recovery?undefined:(a.sensorStatus??'OK'),lastSent:{...p.lastSent,[notificationKey(a)]:now}};
 }
 export function notificationText(a:Alert) {
   const title=a.sensorStatus&&a.sensorStatus!=='OK'?`SENSOR ${a.sensorStatus} / ${a.state}`:a.recovery?'RECOVERY':a.state;

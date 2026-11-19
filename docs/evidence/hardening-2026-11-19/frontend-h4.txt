@@ -1,0 +1,14 @@
+
+> gas-monitor-dashboard@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v7.3.8 building client environment for production...
+transforming...
+✓ 471 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                         0.71 kB │ gzip:   0.46 kB
+dist/assets/index-5CxERDTQ.css          7.43 kB │ gzip:   2.32 kB
+dist/assets/index-inS0GYHt.js         277.71 kB │ gzip:  87.07 kB
+dist/assets/HistoryChart-GzsXpUZW.js  421.73 kB │ gzip: 121.08 kB
+✓ built in 1.32s

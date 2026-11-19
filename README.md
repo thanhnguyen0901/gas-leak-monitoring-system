@@ -10,6 +10,12 @@ Software implementation and preparation work for subsequent phases has been deli
 
 **Actual Wokwi execution, live Telegram delivery, physical ESP32 deployment and calibration remain unverified.** Raw counts are never presented as ppm. The report is a draft awaiting those results.
 
+## Reliability hardening — 2026-11-19
+
+PostgreSQL now stores a transactional notification outbox and cooldown/incident state. ESP32 journals up to 32 transition events in NVS, with 16 additional volatile ingress slots, and retries until a PostgreSQL application ACK. Warm-up/ADC rail attention is explicitly labeled on OLED, dashboard and notifications; readiness/faults use conservative local outputs. Health panels expose memory mode, broker/storage faults and pending/failed/dropped work.
+
+Available host, PostgreSQL, container and browser checks passed; actual Wokwi, flash power cuts, live Telegram/TLS and calibrated hardware still require [one final acceptance round](docs/final-acceptance.md). Bounded buffers and the asynchronous pre-flash ingress window are not a promise of unlimited losslessness or exactly-once external delivery.
+
 ## Run locally
 
 ```sh
@@ -17,7 +23,7 @@ python3 scripts/configure-local.py
 docker compose --project-directory infrastructure up --build -d
 ```
 
-Open **http://localhost:8080**. The first command generates an ignored local database password without printing it. Docker image build/startup remains unverified here because base-image metadata retrieval stalled; native backend/frontend builds and isolated PostgreSQL tests passed. See [integration instructions](docs/integration.md) for configuration and alternatives. Do not expose the anonymous development broker publicly.
+Open **http://localhost:8080**. The first command generates an ignored local database password without printing it. Docker image builds and isolated full-stack startup/MQTT persistence/HTTP checks passed on 2026-11-19; see hardening evidence. The frontend build stage uses Debian after an observed Alpine native-bundler failure. See [integration instructions](docs/integration.md) for configuration and alternatives. Do not expose the anonymous development broker publicly.
 
 For native development: Node 22.12+ (tested with Node 24), `npm ci` in backend and frontend, configure each ignored `.env`, then use their README commands. Set DATABASE_URL for durable PostgreSQL storage; without it, the backend explicitly uses bounded ephemeral memory.
 
@@ -29,6 +35,8 @@ Use [firmware setup](firmware/README.md) and [Wokwi instructions](firmware/wokwi
 scripts/verify.sh
 # Optional isolated DB/integration/outage tests and ESP32 build:
 RUN_DOCKER_TESTS=1 RUN_FIRMWARE_BUILD=1 scripts/verify.sh
+# Optional complete isolated Compose build/startup smoke test:
+python3 tests/compose-smoke.py
 ```
 
 Install dependencies/libraries first. All manual checks are consolidated in [final acceptance](docs/final-acceptance.md), so the user can perform one final acceptance round.
