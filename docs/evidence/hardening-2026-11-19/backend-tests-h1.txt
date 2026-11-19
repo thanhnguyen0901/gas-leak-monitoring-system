@@ -1,0 +1,24 @@
+
+> gas-monitor-backend@0.1.0 test
+> npm run build && node --test dist/test/*.test.js
+
+
+> gas-monitor-backend@0.1.0 build
+> tsc -p tsconfig.json
+
+✔ configured read token protects REST and rejects unauthorized Socket.IO clients (133.283792ms)
+✔ reject invalid numeric and boolean runtime configuration (0.643792ms)
+✔ reject malformed, mismatched and out-of-range MQTT data (2.400417ms)
+✔ MQTT to NestJS REST/WebSocket; alert deduplication and stale device status (412.064167ms)
+✔ warning, danger escalation, recovery, duplicate pending events and cooldown (0.77975ms)
+✔ delivery errors retry without blocking ingestion; rate-limit retry_after respected (0.182625ms)
+✔ bounded queue and failed delivery limit (0.263334ms)
+✔ new danger after delivered recovery bypasses the previous incident cooldown (0.120208ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5558.930791

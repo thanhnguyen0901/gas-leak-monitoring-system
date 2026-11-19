@@ -22,3 +22,11 @@ test('bounded queue and failed delivery limit',async()=>{
  for(let i=0;i<257;i++)q.enqueue(make(String(i),'DANGER'));assert.equal(q.size,256);assert.equal(q.dropped,1);
  for(const t of [0,2000,6000,14000,30000])await q.tick(t);assert.equal(q.dropped,2);
 });
+
+test('new danger after delivered recovery bypasses the previous incident cooldown',async()=>{
+ const sent:string[]=[];const q=new NotificationQueue(async text=>{sent.push(text);},60000);
+ q.enqueue(make('1','DANGER'));await q.tick(0);
+ q.enqueue(make('2','SAFE'));await q.tick(1);
+ q.enqueue(make('3','DANGER'));await q.tick(2);
+ assert.equal(sent.length,3);assert.match(sent[2],/^DANGER/);
+});

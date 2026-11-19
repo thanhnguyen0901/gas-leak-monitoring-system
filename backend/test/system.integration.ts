@@ -16,7 +16,7 @@ test('synthetic device → MQTT → NestJS → PostgreSQL → REST/WebSocket →
  const broker=new Aedes();const tcp=createServer(broker.handle);await new Promise<void>(r=>tcp.listen(0,'127.0.0.1',r));
  process.env.MQTT_URL=`mqtt://127.0.0.1:${(tcp.address() as {port:number}).port}`;
  const app=await createApp();const telegram=app.get(TelegramService);const messages:string[]=[];
- telegram.queue=new NotificationQueue(async text=>{messages.push(text);},60000);
+ telegram.transport=async text=>{messages.push(text);};
  await app.listen(0,'127.0.0.1');const base=await app.getUrl();
  const publisher=connect(process.env.MQTT_URL);const socket=io(base,{transports:['websocket']});let broadcasts=0;socket.on('reading',()=>broadcasts++);
  try {

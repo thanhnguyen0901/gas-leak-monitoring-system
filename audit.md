@@ -234,3 +234,13 @@ Prepared the implementation report draft and FR-01–FR-16 coverage matrix, refr
 Verification: Final backend regression passed (7 tests). Documentation links, audit-prefix preservation, phase statuses, ignored secret/build paths and credential-pattern checks were reviewed. Actual measured Wokwi/hardware/Telegram/calibration results and final report review are still pending; the report is explicitly a draft.
 
 Status: IN PROGRESS. Evidence: `docs/evidence/phase-17/`. User authorized sequential implementation and a separate commit per phase, with final manual acceptance deferred. No push.
+
+## 2026-11-19 — Reliability hardening plan
+
+Read AGENTS.md, requirements.md, plan.md and audit.md before work. User requested a concrete improvement plan and immediate implementation before one final manual test round. Code review identified RAM-only notification state/outbox, alert removal without backend acknowledgement, incomplete sensor-quality handling, and limited operational visibility. Added the bounded H1–H4 hardening plan to plan.md. Original acceptance results remain unchanged; no hardware calibration, Wokwi execution or live Telegram result is inferred.
+
+## 2026-11-19 — H1 durable notifications
+
+Added migration 002 for a transactional PostgreSQL notification outbox and persistent per-device cooldown/unsafe state. Added checksum-verified migration discovery, shared database TLS configuration for runtime/migration, and shutdown ordering that drains notification work before closing the pool. Alert and outbox insertion are one transaction; worker row locks preserve device ordering and prevent concurrent claims. New DANGER incidents bypass previous-incident cooldown. Failed jobs remain observable. Memory mode remains non-durable; external Telegram send followed by pre-commit crash can cause a duplicate (no exactly-once claim).
+
+Verification: TypeScript build, 8 backend tests and 3 real PostgreSQL software/restart integration tests passed using mocked delivery, including pending jobs/cooldown/recovery across worker recreation and concurrent job claims. No real Telegram call or hardware test was performed. Evidence: docs/evidence/hardening-2026-11-19/.

@@ -72,7 +72,7 @@ export class MonitorService implements OnModuleInit, OnModuleDestroy {
     if (kind === 'alert') {
       if (sample.previousState === sample.state || this.seenAlerts.has(key)) return;
       const alert: Alert = { ...sample, id: key, recovery: sample.state === 'SAFE' };
-      if (!await this.storage.saveAlert(alert)) return;
+      if (!await this.storage.saveAlert(alert,this.telegram.enabled)) return;
       this.seenAlerts.add(key);
       if (this.seenAlerts.size > 10000) this.seenAlerts.delete(this.seenAlerts.values().next().value!);
       this.alerts.unshift(alert); this.alerts.length = Math.min(this.alerts.length, 1000);
@@ -102,5 +102,11 @@ export class MonitorService implements OnModuleInit, OnModuleDestroy {
   }
   async getReadings(id: string, limit: number) { return this.storage.pool ? this.storage.history(id,limit) : this.readings.filter(r => r.deviceId === id).slice(0, limit); }
   async getAlerts(id: string | undefined, limit: number) { return this.storage.pool ? this.storage.alertHistory(id,limit) : this.alerts.filter(a => !id || a.deviceId === id).slice(0, limit); }
-  async health() { const storageAvailable=await this.storage.available(); return { status: storageAvailable?'ok':'degraded', storageAvailable, notifications: {enabled:this.telegram.enabled, queued:this.telegram.queue.size, delivered:this.telegram.queue.delivered, dropped:this.telegram.queue.dropped}, storage: this.storage.pool ? 'postgresql' : 'memory', mqttConnected: this.mqttConnected, invalidMessages: this.invalidMessages, droppedMessages: this.droppedMessages }; }
+  async health() {
+    const storageAvailable=await this.storage.available();
+    let notifications:unknown={enabled:this.telegram.enabled,durable:Boolean(this.storage.pool),unavailable:true};
+    if(storageAvailable)notifications=await this.telegram.stats();
+    return {status:storageAvailable?'ok':'degraded',storageAvailable,notifications,storage:this.storage.pool?'postgresql':'memory',
+      mqttConnected:this.mqttConnected,invalidMessages:this.invalidMessages,droppedMessages:this.droppedMessages};
+  }
 }

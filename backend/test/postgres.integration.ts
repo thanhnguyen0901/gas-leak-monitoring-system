@@ -12,8 +12,8 @@ test('real PostgreSQL migration, idempotence, constraints, history and restart',
     assert.equal(await storage.saveAlert(alert),true); assert.equal(await storage.saveAlert(alert),false);
     assert.equal((await storage.alertHistory('db-test',10)).length,1);
     await assert.rejects(()=>storage.saveReading({...sample,sequence:2,rawAdc:5000}));
-  } finally { await storage.onModuleDestroy(); }
+  } finally { await storage.close(); }
   const restarted=new StorageService(); await restarted.ready();
   try { assert.equal((await restarted.history('db-test',10))[0].rawAdc,3000); assert.equal((await restarted.loadDevices())[0].id,'db-test'); }
-  finally { await restarted.onModuleDestroy(); }
+  finally { await restarted.close(); }
 });

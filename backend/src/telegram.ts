@@ -1,13 +1,12 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { Alert } from './contracts';
-export class RetryableDeliveryError extends Error {
-  constructor(public retryAfterMs=1000) { super('Notification delivery failed'); }
-}
+import { StorageService } from './storage';
+import { NotificationPolicy, emptyPolicy, shouldNotify, deliveredPolicy, notificationText, retryDelay, RetryableDeliveryError } from './notification-policy';
+export { RetryableDeliveryError } from './notification-policy';
 export class NotificationQueue {
   private pending: {alert:Alert;attempts:number;next:number}[]=[];
   private queuedIds=new Set<string>();
-  private sent=new Map<string,number>();
-  private active=new Map<string,string>();
+  private policies=new Map<string,NotificationPolicy>();
   private busy=false;
   dropped=0;
   delivered=0;
@@ -20,22 +19,19 @@ export class NotificationQueue {
   async tick(now=Date.now()) {
     if(this.busy)return;
     const item=this.pending[0];if(!item||item.next>now)return;
-    const a=item.alert,key=`${a.deviceId}:${a.state}`;
-    const shouldSend=a.recovery ? this.active.has(a.deviceId) :
-      (a.state==='DANGER' && this.active.get(a.deviceId)==='WARNING') || now-(this.sent.get(key)??-Infinity)>=this.cooldown;
+    const a=item.alert,policy=this.policies.get(a.deviceId)??emptyPolicy();
+    const shouldSend=shouldNotify(a,policy,now,this.cooldown);
     if(!shouldSend){this.remove();return;}
     this.busy=true;
     try {
-      await this.send(`${a.recovery?'RECOVERY':a.state} | ${a.deviceId}\nRaw ADC: ${a.rawAdc} (${a.simulated?'simulated':'uncalibrated raw'})\nFan: ${a.fanOn?'ON':'OFF'}\nReceived: ${a.receivedAt}\nEvent: ${a.id}`);
-      this.sent.set(key,now);
-      if(a.recovery)this.active.delete(a.deviceId);else this.active.set(a.deviceId,a.state);
-      if(this.sent.size>3000)this.sent.delete(this.sent.keys().next().value!);
-      if(this.active.size>1000)this.active.delete(this.active.keys().next().value!);
+      await this.send(notificationText(a));
+      this.policies.set(a.deviceId,deliveredPolicy(a,policy,now));
+      if(this.policies.size>1000)this.policies.delete(this.policies.keys().next().value!);
       this.delivered++;this.remove();
     } catch(error) {
       item.attempts++;
       if(item.attempts>=5){this.dropped++;this.remove();}
-      else item.next=now+Math.max(Math.min(30000,1000*2**item.attempts),error instanceof RetryableDeliveryError ? error.retryAfterMs : 0);
+      else item.next=now+retryDelay(error,item.attempts);
     } finally {this.busy=false;}
   }
   private remove(){const item=this.pending.shift();if(item)this.queuedIds.delete(item.alert.id);}
@@ -54,12 +50,29 @@ export async function sendTelegram(text:string) {
 @Injectable()
 export class TelegramService implements OnModuleInit,OnModuleDestroy {
   readonly enabled=process.env.NOTIFICATIONS_ENABLED==='true';
-  queue=new NotificationQueue(sendTelegram,Number(process.env.NOTIFICATION_COOLDOWN_MS||60000));
+  transport:(text:string)=>Promise<void>=sendTelegram;
+  private readonly cooldown=Number(process.env.NOTIFICATION_COOLDOWN_MS||60000);
+  readonly queue=new NotificationQueue(text=>this.transport(text),this.cooldown);
   private timer?:NodeJS.Timeout;
-  onModuleInit(){
+  private running?:Promise<void>;
+  errors=0;
+  constructor(private readonly storage:StorageService){}
+  async onModuleInit(){
     if(this.enabled && (!process.env.TELEGRAM_BOT_TOKEN||!process.env.TELEGRAM_CHAT_ID))throw new Error('Enabled Telegram requires token and chat ID');
-    if(this.enabled)this.timer=setInterval(()=>void this.queue.tick(),500);
+    await this.storage.ready();
+    if(this.enabled)this.timer=setInterval(()=>void this.tick(),500);
   }
-  enqueue(alert:Alert){if(this.enabled)this.queue.enqueue(alert);}
-  onModuleDestroy(){if(this.timer)clearInterval(this.timer);}
+  async tick(){
+    if(this.running)return this.running;
+    this.running=(this.storage.pool ? this.storage.processNotification(text=>this.transport(text),this.cooldown).then(()=>{}) : this.queue.tick())
+      .catch(()=>{this.errors++;}).finally(()=>{this.running=undefined;});
+    return this.running;
+  }
+  enqueue(alert:Alert){if(this.enabled&&!this.storage.pool)this.queue.enqueue(alert);}
+  async stats(){
+    const durable=this.storage.pool ? await this.storage.notificationStats() : null;
+    return {enabled:this.enabled,durable:Boolean(this.storage.pool),queued:durable?.pending??this.queue.size,
+      delivered:durable?.sent??this.queue.delivered,failed:durable?.failed??this.queue.dropped,suppressed:durable?.suppressed??0,errors:this.errors};
+  }
+  async onModuleDestroy(){if(this.timer)clearInterval(this.timer);await this.running;}
 }
