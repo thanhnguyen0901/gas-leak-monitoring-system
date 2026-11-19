@@ -70,7 +70,7 @@ export class MonitorService implements OnModuleInit, OnModuleDestroy {
     const sample: Reading = { ...value, receivedAt: new Date().toISOString() };
     const key = `${sample.deviceId}:${sample.bootId}:${sample.sequence}`;
     if (kind === 'alert') {
-      if (sample.previousState === sample.state) return;
+      if (sample.previousState === sample.state && (sample.sensorStatus??'OK')===(sample.previousSensorStatus??'OK')) return;
       if (this.seenAlerts.has(key)) {this.acknowledge(sample);return;}
       const alert: Alert = { ...sample, id: key, recovery: sample.state === 'SAFE' };
       const inserted=await this.storage.saveAlert(alert,this.telegram.enabled);

@@ -15,4 +15,4 @@ if [[ -n "${GAS_CONFIG_HEADER:-}" ]]; then
 fi
 "$cli" compile --fqbn esp32:esp32:esp32doit-devkit-v1 \
   --build-path "${GAS_BUILD_DIR:-/tmp/gas-monitor-build}" \
-  --output-dir firmware/wokwi/build "${extra[@]}" firmware/src/gas_input_simulation
+  --output-dir "${GAS_OUTPUT_DIR:-firmware/wokwi/build}" "${extra[@]}" firmware/src/gas_input_simulation

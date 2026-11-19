@@ -11,6 +11,8 @@ constexpr uint8_t RELAY_PIN = 33;
 constexpr bool RELAY_ACTIVE_LOW = Config::RELAY_ACTIVE_LOW; // Wokwi NPN relay; verify actual module polarity.
 constexpr uint32_t SAMPLE_INTERVAL_MS = 500;
 GasStateEngine stateEngine({Config::WARNING_ADC, Config::DANGER_ADC, Config::HYSTERESIS_ADC});
+SensorHealth sensorHealth({Config::SENSOR_WARMUP_MS,Config::SENSOR_DIAGNOSTICS_ENABLED,Config::SENSOR_LOW_RAIL,Config::SENSOR_HIGH_RAIL,Config::SENSOR_RAIL_FAULT_MS,Config::SENSOR_RECOVERY_SAMPLES});
+SensorStatus sensorStatus=SensorStatus::OK;
 GasState gasState = GasState::SAFE;
 int gasRawAdc = 0;
 uint32_t lastSample = 0;
@@ -37,10 +39,14 @@ void loop() {
     lastSample = now;
     gasRawAdc = analogRead(GAS_INPUT_PIN);
     const auto previousState = gasState;
+    const auto previousSensorStatus=sensorStatus;
+    sensorStatus=sensorHealth.update(gasRawAdc,now);
     gasState = stateEngine.update(gasRawAdc);
-    recordSnapshot({gasRawAdc, gasState, previousState, gasState != GasState::SAFE, ++sequence, now});
-    Serial.printf("Gas raw ADC: %d State: %s\n", gasRawAdc, stateName(gasState));
-    display.update(gasRawAdc, gasState);
+    if(sensorStatus!=SensorStatus::OK)gasState=GasState::DANGER; // Unknown/unready signal: conservative outputs.
+
+    recordSnapshot({gasRawAdc, gasState, previousState, gasState != GasState::SAFE, ++sequence, now, sensorStatus, previousSensorStatus});
+    Serial.printf("Gas raw ADC: %d State: %s Sensor: %s\n", gasRawAdc, stateName(gasState),sensorStatusName(sensorStatus));
+    display.update(gasRawAdc, gasState,sensorStatus);
   }
   const auto out = localOutputs(gasState, now);
   digitalWrite(GREEN_PIN, out.green);

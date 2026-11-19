@@ -7,6 +7,6 @@ struct Snapshot {
   GasState state=GasState::SAFE, previous=GasState::SAFE;
   bool fan=false;
   uint32_t sequence=0,uptime=0;
-  SensorStatus sensorStatus=SensorStatus::OK;
+  SensorStatus sensorStatus=SensorStatus::OK,previousSensorStatus=SensorStatus::OK;
 };
 struct AlertEnvelope { Snapshot sample{}; char boot[17]{}; };

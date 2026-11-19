@@ -1,0 +1,26 @@
+
+> gas-monitor-backend@0.1.0 test
+> npm run build && node --test dist/test/*.test.js
+
+
+> gas-monitor-backend@0.1.0 build
+> tsc -p tsconfig.json
+
+✔ configured read token protects REST and rejects unauthorized Socket.IO clients (181.341375ms)
+✔ reject invalid numeric and boolean runtime configuration (0.575542ms)
+✔ reject malformed, mismatched and out-of-range MQTT data (2.700292ms)
+✔ MQTT to NestJS REST/WebSocket; alert deduplication and stale device status (471.356625ms)
+✔ quality-only transitions are stored/notified and never described as confirmed gas concentration (153.579625ms)
+✔ warning, danger escalation, recovery, duplicate pending events and cooldown (0.730834ms)
+✔ delivery errors retry without blocking ingestion; rate-limit retry_after respected (0.183459ms)
+✔ bounded queue and failed delivery limit (0.274791ms)
+✔ new danger after delivered recovery bypasses the previous incident cooldown (0.12475ms)
+✔ quality-only change sends sensor reason and later trusted gas danger despite cooldown (0.179375ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5634.227042

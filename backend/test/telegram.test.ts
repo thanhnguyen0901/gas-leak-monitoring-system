@@ -30,3 +30,10 @@ test('new danger after delivered recovery bypasses the previous incident cooldow
  q.enqueue(make('3','DANGER'));await q.tick(2);
  assert.equal(sent.length,3);assert.match(sent[2],/^DANGER/);
 });
+
+test('quality-only change sends sensor reason and later trusted gas danger despite cooldown',async()=>{
+ const sent:string[]=[];const q=new NotificationQueue(async text=>{sent.push(text);},60000);
+ const fault={...make('1','DANGER'),sensorStatus:'WARMING_UP' as const,previousSensorStatus:'OK' as const};
+ q.enqueue(fault);await q.tick(0);assert.match(sent[0],/^SENSOR WARMING_UP/);
+ q.enqueue({...make('2','DANGER'),previousState:'DANGER',sensorStatus:'OK',previousSensorStatus:'WARMING_UP'});await q.tick(1);assert.match(sent[1],/^DANGER/);
+});

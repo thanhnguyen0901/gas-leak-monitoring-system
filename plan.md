@@ -287,7 +287,7 @@ Phase 0 is COMPLETED. The user authorized implementing subsequent phases sequent
 
 - [x] H1: Transactional PostgreSQL notification outbox, persistent cooldown/incident state, restart recovery and shared secure database configuration.
 - [x] H2: Backend application ACK after durable alert storage; ESP32 bounded NVS alert journal and retry-until-ACK with explicit overflow counters.
-- [ ] H3: Configurable sensor warm-up and sustained ADC rail diagnosis, fail-safe local outputs, OLED/payload/dashboard quality labels.
+- [x] H3: Configurable sensor warm-up and sustained ADC rail diagnosis, fail-safe local outputs, OLED/payload/dashboard quality labels.
 - [ ] H4: Dashboard service health, deployment/configuration consistency and focused restart/outage/corruption regression tests.
 - [ ] Build changed applications/firmware, run isolated integration checks, update evidence and final acceptance documentation.
 - [ ] User acceptance: Wokwi, live Telegram/TLS, actual wiring, sensor calibration, brownout/airflow and physical failures.

@@ -14,5 +14,9 @@ int main(){
  auto corrupt=persisted;corrupt.count=100;assert(!journal.restore(&corrupt,sizeof(corrupt)));
  corrupt=persisted;corrupt.checksum^=1;assert(!journal.restore(&corrupt,sizeof(corrupt)));assert(!journal.restore(&persisted,sizeof(persisted)-1));
  auto invalid=event(3);invalid.boot[0]='!';AlertJournal fresh;assert(!fresh.push(invalid));invalid=event(4);invalid.sample.fan=false;assert(!fresh.push(invalid));
+ AlertJournal::LegacyImage legacy{};legacy.count=1;legacy.events[0].sample={3000,GasState::DANGER,GasState::SAFE,true,7,100,SensorStatus::OK};std::memcpy(legacy.events[0].boot,"0123456789abcdef",17);
+ uint32_t hash=2166136261u;const auto* bytes=reinterpret_cast<const uint8_t*>(&legacy);
+ for(size_t i=0;i<offsetof(AlertJournal::LegacyImage,checksum);i++){hash^=bytes[i];hash*=16777619u;}legacy.checksum=hash;
+ AlertJournal migrated;assert(migrated.restore(&legacy,sizeof(legacy)));assert(migrated.front()->sample.sequence==7);assert(migrated.front()->sample.previousSensorStatus==SensorStatus::OK);assert(migrated.data().version==2);
  std::cout<<"Journal restart/order/ACK removal/capacity/corruption/schema validation passed\n";
 }

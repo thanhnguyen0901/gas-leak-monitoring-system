@@ -14,7 +14,7 @@ export async function waitFor(check: () => Promise<boolean> | boolean, timeout=5
   throw new Error('Condition timed out');
 }
 test('reject malformed, mismatched and out-of-range MQTT data', () => {
-  for (const value of [{...sample,rawAdc:4096},{...sample,fanOn:false},{...sample,deviceId:'different'},{...sample,rawAdc:1.5},{...sample,state:'UNKNOWN'}])
+  for (const value of [{...sample,rawAdc:4096},{...sample,fanOn:false},{...sample,deviceId:'different'},{...sample,rawAdc:1.5},{...sample,state:'UNKNOWN'},{...sample,state:'SAFE',fanOn:false,sensorStatus:'LOW_RAIL'},{...sample,sensorStatus:'INVALID'}])
     assert.throws(()=>parseReading(topic+'telemetry',Buffer.from(JSON.stringify(value))));
   assert.throws(()=>parseReading(topic+'telemetry',Buffer.from('{')));
 });

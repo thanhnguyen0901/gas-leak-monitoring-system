@@ -28,8 +28,8 @@ inline void connectivityTask(void*) {
       if(!owner.length())persistent=preferences.putString("device",Config::DEVICE_ID)>0;
       const size_t bytes=preferences.getBytesLength("events");
       if(bytes) {
-        AlertJournal::Image image;
-        persistent=bytes==sizeof(image)&&preferences.getBytes("events",&image,sizeof(image))==sizeof(image)&&journal.restore(&image,sizeof(image));
+        uint8_t image[AlertJournal::MAX_IMAGE_SIZE];
+        persistent=bytes<=sizeof(image)&&preferences.getBytes("events",image,bytes)==bytes&&journal.restore(image,bytes);
       }
       droppedAlerts.fetch_add(preferences.getUInt("dropped",0));
       if(!persistent)preferences.end();
@@ -62,10 +62,10 @@ inline void connectivityTask(void*) {
   auto publish=[&](const char* topic,const Snapshot& sample,const char* boot) {
     char json[600];
     snprintf(json,sizeof(json),
-      "{\"version\":1,\"deviceId\":\"%s\",\"bootId\":\"%s\",\"sequence\":%lu,\"uptimeMs\":%lu,\"rawAdc\":%d,\"state\":\"%s\",\"previousState\":\"%s\",\"fanOn\":%s,\"simulated\":%s,\"droppedAlerts\":%lu,\"pendingAlerts\":%lu,\"alertJournalHealthy\":%s}",
+      "{\"version\":1,\"deviceId\":\"%s\",\"bootId\":\"%s\",\"sequence\":%lu,\"uptimeMs\":%lu,\"rawAdc\":%d,\"state\":\"%s\",\"previousState\":\"%s\",\"fanOn\":%s,\"simulated\":%s,\"droppedAlerts\":%lu,\"pendingAlerts\":%lu,\"alertJournalHealthy\":%s,\"sensorStatus\":\"%s\",\"previousSensorStatus\":\"%s\"}",
       Config::DEVICE_ID,boot,static_cast<unsigned long>(sample.sequence),static_cast<unsigned long>(sample.uptime),sample.raw,
       stateName(sample.state),stateName(sample.previous),sample.fan?"true":"false",Config::SIMULATED_INPUT?"true":"false",
-      static_cast<unsigned long>(droppedAlerts.load()),static_cast<unsigned long>(journal.size()+(alertEvents?uxQueueMessagesWaiting(alertEvents):0)),alertJournalHealthy.load()?"true":"false");
+      static_cast<unsigned long>(droppedAlerts.load()),static_cast<unsigned long>(journal.size()+(alertEvents?uxQueueMessagesWaiting(alertEvents):0)),alertJournalHealthy.load()?"true":"false",sensorStatusName(sample.sensorStatus),sensorStatusName(sample.previousSensorStatus));
     return mqtt.publish(topic,json);
   };
   for(;;) {
