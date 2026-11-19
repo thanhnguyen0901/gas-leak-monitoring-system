@@ -1,13 +1,25 @@
 # MQTT v1 contract
 
-Topics: `gas-monitor/device/{deviceId}/telemetry`, `/alert`, `/status`. Device IDs are 1–64 ASCII letters/digits/underscore/hyphen. Broker is configurable: HiveMQ Cloud uses TLS/8883 with CA certificate and credentials; anonymous plaintext is only for the isolated local development broker.
+Topics use `gas-monitor/device/{deviceId}/telemetry`, `/alert`, `/status` and `/ack`. Device IDs contain 1–64 ASCII letters/digits/underscore/hyphen. Configure cloud brokers using TLS/8883, credentials and CA validation. The anonymous plaintext broker is isolated localhost development only.
 
-Telemetry is published every 2 seconds, not retained. State transitions publish alert events. The shared payload is JSON with `version: 1`, `deviceId`, 16-hex `bootId`, unsigned `sequence`, `uptimeMs`, integer `rawAdc` (0–4095), `state`, `previousState` (SAFE/WARNING/DANGER), boolean `fanOn`, and `simulated`. Time of receipt is assigned by backend; device uptime is not wall-clock time or ppm. Alert identity is deviceId + bootId + sequence. Startup emits an alert if its first input is unsafe. SAFE transition from WARNING/DANGER is recovery.
+Payload: version=1, deviceId, 16-hex bootId, unsigned sequence/uptimeMs, rawAdc (0–4095), state/previousState, fanOn, simulated. Optional diagnostics: droppedAlerts, pendingAlerts (0–48), alertJournalHealthy. Receipt time is assigned by backend; device uptime is not a gas concentration or wall-clock timestamp.
 
-Retained `/status` is `{ "online": true }`; Last Will is `{ "online": false }` at QoS 1. Backend also times out stale telemetry after 10 seconds; broker status alone is insufficient to establish a fresh reading.
+Telemetry remains QoS0 every 2s, not retained; obsolete samples are overwritten. It is not a durable sampling log. Alerts represent transitions and have identity deviceId+bootId+sequence. SAFE after unsafe is recovery. `/status` is retained `{"online":true}` with offline Last Will at QoS1; stale telemetry independently expires online status.
 
-Firmware publishes data at QoS 0 (PubSubClient limitation). A 16-event RAM queue retains transitions during short outages; after it fills, newer events are dropped with a Serial message, while local safety continues. Latest telemetry overwrites its one-slot queue; obsolete samples are not replayed. There is no durable offline history or guaranteed broker acknowledgement. Backend deduplicates alert identities. These limits must be considered in final outage testing.
+## Durable alert acknowledgement
 
-TLS validation is never disabled: supply CA PEM and allow NTP clock synchronization for cloud TLS. Worker reconnect attempts are spaced 10 seconds apart. DNS/TLS/broker work runs exclusively on core 0; sampling and local outputs never wait for it.
+Firmware retains transitions in a checksummed, versioned 32-event Preferences/NVS journal, plus a 16-event RAM ingress queue. Flash operations run only in the core-0 worker. The oldest journal event is retried every 3s until an application ACK arrives on that device's `/ack` topic. The backend emits non-retained QoS1 JSON exactly as `{"eventId":"<bootId>:<sequence>"}` after PostgreSQL alert insertion commits, including when a previously committed duplicate is retried. This identity-only ACK has a canonical byte encoding for the constrained firmware client. No ACK is issued for invalid payloads or failed writes. Memory-only backend mode deliberately does not issue durable ACKs.
 
-Sources: [PubSubClient API](https://pubsubclient.knolleary.net/api), [ESP32 TLS](https://github.com/espressif/arduino-esp32/tree/master/libraries/NetworkClientSecure).
+A journal entry is removed only after matching ACK and successful local removal persistence. A crash after backend commit but before ACK/removal causes retry; database uniqueness prevents another stored alert/outbox job. Broker ACLs should allow a device to publish its own telemetry/alert/status and subscribe to its own ack; only the backend should publish ACKs.
+
+## Explicit limits
+
+- NVS persistence occurs asynchronously. Events still in RAM before the worker commits them can be lost on sudden power loss; DNS/TLS work can delay that transfer. Events already journaled survive ordinary reboot if NVS is intact.
+- Capacity is bounded: 32 journal plus 16 ingress events. New transitions beyond capacity increment droppedAlerts. Periodic telemetry still reports the current state, queue depth and journal health; do not infer complete offline history.
+- NVS unavailable, full, corrupt, unsupported-version or identity-mismatched data is reported as unhealthy. Corrupt/foreign stored data is not silently overwritten; current work uses RAM fallback or retries failed writes. Local safety continues. A device-ID change must follow draining/reviewing its old journal.
+- Only transitions and ACK removals cause journal writes; periodic telemetry is never written to NVS. Flash endurance, power cuts and corruption recovery require final hardware acceptance.
+- Data publish is still QoS0; application ACK improves transition delivery to PostgreSQL, not exactly-once transport or unlimited losslessness.
+
+TLS is never set insecure. Supply CA PEM and clock synchronization for cloud TLS. Reconnect is isolated from local sampling/outputs.
+
+References: [PubSubClient API](https://pubsubclient.knolleary.net/api), [ESP32 Preferences](https://docs.espressif.com/projects/arduino-esp32/en/latest/api/preferences.html).

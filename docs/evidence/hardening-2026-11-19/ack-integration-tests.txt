@@ -1,0 +1,19 @@
+
+> gas-monitor-backend@0.1.0 test:system
+> npm run build && node --test --test-concurrency=1 dist/test/system.integration.js dist/test/notifications.integration.js
+
+
+> gas-monitor-backend@0.1.0 build
+> tsc -p tsconfig.json
+
+✔ transactional outbox survives restart; cooldown and recovery persist; duplicate alert creates one job (105.099ms)
+✔ persisted retry_after survives worker recreation and concurrent workers claim once (26.728583ms)
+✔ synthetic device → MQTT → NestJS → PostgreSQL → REST/WebSocket → mock Telegram (1651.773ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2142.293375

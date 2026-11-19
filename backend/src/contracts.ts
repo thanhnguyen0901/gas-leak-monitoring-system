@@ -6,6 +6,9 @@ export const readingSchema = z.object({
   sequence: z.number().int().min(0).max(0xffffffff), uptimeMs: z.number().int().min(0).max(0xffffffff),
   rawAdc: z.number().int().min(0).max(4095), state, previousState: state,
   fanOn: z.boolean(), simulated: z.boolean(),
+  droppedAlerts:z.number().int().min(0).max(0xffffffff).optional(),
+  pendingAlerts:z.number().int().min(0).max(48).optional(),
+  alertJournalHealthy:z.boolean().optional(),
 }).strict();
 export type Reading = z.infer<typeof readingSchema> & { receivedAt: string };
 export type Alert = Reading & { id: string; recovery: boolean };

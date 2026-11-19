@@ -43,7 +43,7 @@ export class MonitorService implements OnModuleInit, OnModuleDestroy {
     this.client.on('error', () => { this.logger.warn('MQTT connection error; retrying'); });
     this.client.on('message', (topic, payload, packet) => {
       // Ignore retained readings/events to avoid replayed notifications. Status is intentionally retained.
-      if (packet.retain && !topic.endsWith('/status')) return;
+      if (topic.endsWith('/ack') || (packet.retain && !topic.endsWith('/status'))) return;
       if (this.queued >= 1000) { this.droppedMessages++; return; }
       this.queued++;
       this.pending = this.pending.then(() => this.ingest(topic, payload)).catch(() => {
@@ -70,9 +70,12 @@ export class MonitorService implements OnModuleInit, OnModuleDestroy {
     const sample: Reading = { ...value, receivedAt: new Date().toISOString() };
     const key = `${sample.deviceId}:${sample.bootId}:${sample.sequence}`;
     if (kind === 'alert') {
-      if (sample.previousState === sample.state || this.seenAlerts.has(key)) return;
+      if (sample.previousState === sample.state) return;
+      if (this.seenAlerts.has(key)) {this.acknowledge(sample);return;}
       const alert: Alert = { ...sample, id: key, recovery: sample.state === 'SAFE' };
-      if (!await this.storage.saveAlert(alert,this.telegram.enabled)) return;
+      const inserted=await this.storage.saveAlert(alert,this.telegram.enabled);
+      this.acknowledge(sample);
+      if(!inserted)return;
       this.seenAlerts.add(key);
       if (this.seenAlerts.size > 10000) this.seenAlerts.delete(this.seenAlerts.values().next().value!);
       this.alerts.unshift(alert); this.alerts.length = Math.min(this.alerts.length, 1000);
@@ -95,6 +98,9 @@ export class MonitorService implements OnModuleInit, OnModuleDestroy {
     this.devices.set(sample.deviceId, { id: sample.deviceId, latest: sample, lastSeen: sample.receivedAt, online: true });
     this.gateway.emit('reading', sample);
     this.gateway.emit('devices', this.getDevices());
+  }
+  private acknowledge(sample:Reading) {
+    if(this.storage.pool&&this.client?.connected)this.client.publish(`gas-monitor/device/${sample.deviceId}/ack`,JSON.stringify({eventId:`${sample.bootId}:${sample.sequence}`}),{qos:1,retain:false},()=>{});
   }
   getDevices() {
     const timeout = Number(process.env.STALE_AFTER_MS || 10000);

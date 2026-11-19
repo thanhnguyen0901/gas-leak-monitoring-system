@@ -59,3 +59,12 @@ Calibrate thresholds on real hardware. Raw ADC readings must not automatically b
 ## Security and configuration
 
 Never commit secrets, including Wi-Fi passwords, MQTT credentials, Telegram Bot Tokens, database credentials, or API secrets. Add placeholder-only configuration templates when implementing the relevant phase. Keep broker-specific connection details configurable; HiveMQ Cloud is the initial planned broker, not a fixed architecture dependency.
+
+## Reliability hardening accepted on 2026-11-19
+
+The final-polish request adds these implementation expectations without changing raw ADC/calibration boundaries:
+
+- Persist pending notifications and per-device cooldown/unsafe state in PostgreSQL when durable storage is configured. Alert/outbox insertion is atomic; exactly-once Telegram delivery across a remote send/SQL-commit crash is not guaranteed.
+- Retain bounded ESP32 transition events in NVS and retry until PostgreSQL application ACK; expose overflow/storage-health counters. RAM ingress and finite flash capacity remain explicit limits.
+- Provide configurable sensor warm-up and sustained ADC rail diagnostics with conservative local outputs and visible quality/reason labels. Software must not claim reliable floating-wire diagnosis without supporting circuitry.
+- Expose service/storage/notification health in the dashboard and include restart/outage regressions in the final verification suite.

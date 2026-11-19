@@ -20,6 +20,7 @@ test('broker unavailable/reconnect, stale telemetry, retired boot and database o
  const pub=connect(process.env.MQTT_URL,{reconnectPeriod:100});
  const sample={version:1 as const,deviceId:'fault-test',bootId:'0123456789abcdef',sequence:1,uptimeMs:1,rawAdc:3000,state:'DANGER' as const,previousState:'SAFE' as const,fanOn:true,simulated:true};
  const topic='gas-monitor/device/fault-test/telemetry';
+ const acks:string[]=[];pub.on('message',(topic,body)=>{if(topic.endsWith('/ack'))acks.push(body.toString());});
  try {
   await until(()=>monitor.mqttConnected && pub.connected);
   await pub.publishAsync(topic,JSON.stringify(sample),{qos:1});await until(()=>monitor.getDevices().length===1);
@@ -32,13 +33,22 @@ test('broker unavailable/reconnect, stale telemetry, retired boot and database o
   await until(()=>monitor.getDevices()[0].latest?.bootId==='fedcba9876543210');
   await monitor.ingest(topic,Buffer.from(JSON.stringify({...sample,sequence:2})));
   assert.equal(monitor.getDevices()[0].latest?.bootId,'fedcba9876543210');
+  await pub.subscribeAsync('gas-monitor/device/fault-test/ack');
+  const alert={...sample,bootId:'fedcba9876543210'};
   execFileSync('docker',['pause',process.env.GAS_TEST_DB_CONTAINER!],{stdio:'ignore'});
+  await pub.publishAsync('gas-monitor/device/fault-test/alert',JSON.stringify(alert),{qos:1});
   assert.equal((await monitor.health()).storageAvailable,false);
   await assert.rejects(()=>store.history('fault-test',10));
+  assert.equal(acks.length,0,'No application ACK before successful DB commit');
   execFileSync('docker',['unpause',process.env.GAS_TEST_DB_CONTAINER!],{stdio:'ignore'});
   await until(()=>store.available());
   assert.equal((await monitor.health()).status,'ok');
   assert.equal((await store.history('fault-test',10)).length,2);
+  await pub.publishAsync('gas-monitor/device/fault-test/alert',JSON.stringify(alert),{qos:1});
+  await until(()=>acks.length===1);
+  await pub.publishAsync('gas-monitor/device/fault-test/alert',JSON.stringify(alert),{qos:1});
+  await until(()=>acks.length===2);
+  assert.equal((await store.alertHistory('fault-test',10)).length,1);
  }finally {
   try{execFileSync('docker',['unpause',process.env.GAS_TEST_DB_CONTAINER!],{stdio:'ignore'});}catch{}
   await pub.endAsync(true);await app.close();await new Promise<void>(r=>tcp.close(()=>r()));await new Promise<void>(r=>broker.close(()=>r()));

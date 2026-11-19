@@ -1,0 +1,18 @@
+
+> gas-monitor-backend@0.1.0 test:failure
+> npm run build && node --test dist/test/failure.integration.js
+
+
+> gas-monitor-backend@0.1.0 build
+> tsc -p tsconfig.json
+
+[Nest] 88927  - 11/19/2026, 11:14:35 AM    WARN [Monitor] Message processing failed
+✔ broker unavailable/reconnect, stale telemetry, retired boot and database outage/recovery (10575.210583ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10812.083459
